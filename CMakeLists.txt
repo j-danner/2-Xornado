@@ -69,29 +69,30 @@ if(COMPILER_SUPPORTS_MARCH_NATIVE)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native -mtune=native")
 endif()
 
+##uncomment test and bench targets as test instances are not part of the repository
 # set up unit tests with Catch2 - if found
-find_package(Catch2 3 QUIET)
-if(Catch2_FOUND)
-    set_property(GLOBAL PROPERTY CTEST_TARGETS_ADDED ON)
-    include(CTest)
-    include(Catch)
-    # These tests can use the Catch2-provided main
-    add_executable(testing tests/test_xlit.cpp tests/test_xsys.cpp tests/test_graph.cpp tests/test_impl_graph.cpp tests/test_solve.cpp tests/test_trie.cpp)
-    #add_executable(testing tests/test_trie.cpp)
-    target_link_libraries(testing PRIVATE graph Catch2::Catch2WithMain graph)
-    catch_discover_tests(testing)
-    enable_testing()
-endif()
+#find_package(Catch2 3 QUIET)
+#if(Catch2_FOUND)
+#    set_property(GLOBAL PROPERTY CTEST_TARGETS_ADDED ON)
+#    include(CTest)
+#    include(Catch)
+#    # These tests can use the Catch2-provided main
+#    add_executable(testing tests/test_xlit.cpp tests/test_xsys.cpp tests/test_graph.cpp tests/test_impl_graph.cpp tests/test_solve.cpp tests/test_trie.cpp)
+#    #add_executable(testing tests/test_trie.cpp)
+#    target_link_libraries(testing PRIVATE graph Catch2::Catch2WithMain graph)
+#    catch_discover_tests(testing)
+#    enable_testing()
+#endif()
 
-# set up micro-benchmarks with google-bench
-find_package(benchmark QUIET)
-if(benchmark_FOUND)
-    add_executable(bench tests/benchmark.cpp)
-    target_link_libraries(bench PRIVATE benchmark::benchmark graph)
-endif()
-
-get_filename_component(BENCH_FILES "../benchmarks" ABSOLUTE CACHE)
-add_definitions(-DBENCH_FILES="${BENCH_FILES}")
+## set up micro-benchmarks with google-bench
+#find_package(benchmark QUIET)
+#if(benchmark_FOUND)
+#    add_executable(bench tests/benchmark.cpp)
+#    target_link_libraries(bench PRIVATE benchmark::benchmark graph)
+#endif()
+#
+#get_filename_component(BENCH_FILES "../benchmarks" ABSOLUTE CACHE)
+#add_definitions(-DBENCH_FILES="${BENCH_FILES}")
 
 
 
