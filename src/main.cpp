@@ -95,17 +95,17 @@ int main(int argc, char const *argv[])
         
     
     //upd opts
-    program.add_argument("-upd","--update-alg")
-        .help("algorithm to use for update-graph function, 'ts' for alg in two steps (1. update all linerals, 2. merge verts); 'hf' for hash-fight based update; 'par' for parallel version.")
-        .default_value(std::string("ts"))
-        .action([](const std::string& value) {
-            static const vec<std::string> choices = { "ts", "hf", "par", "hfd" };
-            if (std::find(choices.begin(), choices.end(), value) != choices.end()) {
-                return value;
-            }
-            //arg invalid!
-            throw std::runtime_error("invalid argument passed for parameter -upd");
-        });
+    //program.add_argument("-upd","--update-alg")
+    //    .help("algorithm to use for update-graph function, 'ts' for alg in two steps (1. update all linerals, 2. merge verts); 'hf' for hash-fight based update; 'par' for parallel version.")
+    //    .default_value(std::string("ts"))
+    //    .action([](const std::string& value) {
+    //        static const vec<std::string> choices = { "ts", "hf", "par", "hfd" };
+    //        if (std::find(choices.begin(), choices.end(), value) != choices.end()) {
+    //            return value;
+    //        }
+    //        //arg invalid!
+    //        throw std::runtime_error("invalid argument passed for parameter -upd");
+    //    });
     
     //score opts
     program.add_argument("-sc","--score")
@@ -183,12 +183,12 @@ int main(int argc, char const *argv[])
 
     auto fls_s = program.get<int>("-flss");
     
-    auto upd_str = program.get<std::string>("-upd");
-    upd_alg upd = upd_alg::hf;
-    if(upd_str=="ts") upd = upd_alg::ts;
-    else if(upd_str=="hf") upd = upd_alg::hf;
-    else if(upd_str=="par") upd = upd_alg::par;
-    else if(upd_str=="hfd") upd = upd_alg::hfd;
+    //auto upd_str = program.get<std::string>("-upd");
+    upd_alg upd = upd_alg::ts;
+    //if(upd_str=="ts") upd = upd_alg::ts;
+    //else if(upd_str=="hf") upd = upd_alg::hf;
+    //else if(upd_str=="par") upd = upd_alg::par;
+    //else if(upd_str=="hfd") upd = upd_alg::hfd;
     
     sc score = program.get<bool>("-sc") ? sc::active : sc::inactive;
 
