@@ -86,8 +86,7 @@ impl_graph::impl_graph(const vec< vec<lineral> >& clss_, const options& opt_) : 
                 if(vl.V_contains(l)) continue;
                 if(l.has_constant()) l.add_one();
                 auto ins = vl.insert(no_v, std::move(l), 0);
-                assert(ins.inserted);
-                no_v += 2;
+                no_v += ins.inserted ? 2 : 0;
             }
             //note: f*g = (f+g+1)*f = (f+g+1)*g, i.e. add edges:
             //now add edges: fp1 -> g; fpg -> f; fpg -> g   (symmetric edges are then constructed from sigma!)

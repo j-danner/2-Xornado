@@ -142,7 +142,7 @@ lineral vl_trie::operator[](const var_t v) const {
 };
 
 lineral vl_trie::at(const var_t v) const {
-    //if(v_node.at(v)==ROOT && assigned_vert.at(v_node.at(v)) != v) throw std::runtime_error("Label of vertex " + std::to_string(v) + " not found in trie.");
+    //if(v_node.at(v)==ROOT && assigned_vert.at(v_node.at(v)) != v) throw std::out_of_range("Label of vertex " + std::to_string(v) + " not found in trie.");
     return std::move( lineral( vec<var_t>(begin(v),end()), true) );
 };
 
@@ -177,7 +177,7 @@ var_t vl_trie::at(const lineral& lit) const {
         if(search != nodes[curr_node].children.end()) {
             curr_node = search->second;
         } else {
-            throw std::runtime_error("Vertex of label " + lit.to_str() + " not found in trie.");
+            throw std::out_of_range("Vertex of label " + lit.to_str() + " not found in trie.");
         };
     }
     if(lit.has_constant()) {
@@ -185,12 +185,12 @@ var_t vl_trie::at(const lineral& lit) const {
         if(search != nodes[curr_node].children.end()) {
             curr_node = search->second;
         } else {
-            throw std::runtime_error("Vertex of label " + lit.to_str() + " not found in trie.");
+            throw std::out_of_range("Vertex of label " + lit.to_str() + " not found in trie.");
         }
     }
 
     const auto search = assigned_vert.find( curr_node );
-    if(search == assigned_vert.end() ) throw std::runtime_error("Vertex of label " + lit.to_str() + " not found in trie.");
+    if(search == assigned_vert.end() ) throw std::out_of_range("Vertex of label " + lit.to_str() + " not found in trie.");
     return search->second;
 };
 
@@ -204,7 +204,7 @@ std::pair<var_t,bool> vl_trie::at_(const lineral& lit) const {
         if(search != nodes[curr_node].children.end()) {
             curr_node = search->second;
         } else {
-            throw std::runtime_error("Vertex of label " + lit.to_str() + " not found in trie.");
+            throw std::out_of_range("Vertex of label " + lit.to_str() + " not found in trie.");
         };
     }
     //we ignored constant so far!
@@ -220,12 +220,12 @@ std::pair<var_t,bool> vl_trie::at_(const lineral& lit) const {
         if(search_ != nodes[curr_node].children.end()) {
             curr_node = search_->second;
         } else {
-            throw std::runtime_error("Vertex of label " + lit.to_str() + " not found in trie.");
+            throw std::out_of_range("Vertex of label " + lit.to_str() + " not found in trie.");
         };
 
         //now curr_node points to lit with constant; check if it has an assigned vert!
         const auto search2 = assigned_vert.find( curr_node );
-        if(search2 == assigned_vert.end() ) throw std::runtime_error("Vertex of label " + lit.to_str() + " not found in trie.");
+        if(search2 == assigned_vert.end() ) throw std::out_of_range("Vertex of label " + lit.to_str() + " not found in trie.");
         return {search2->second, lit.has_constant()};
     }
 };

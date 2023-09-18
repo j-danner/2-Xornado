@@ -33,6 +33,7 @@
 #include <cstring>
 #include <algorithm>
 #include <stdexcept>
+#include <limits>
 
 
 
@@ -69,6 +70,7 @@ parsed_xnf read_xnf(const std::string &fname) {
     var_t num_cls = 0;
     
     vec< vec<lineral> > cls;
+    vec< lineral > cl;
 
     std::ifstream file(fname);
     if ( file.fail() ) {
@@ -90,9 +92,18 @@ parsed_xnf read_xnf(const std::string &fname) {
                 }
                 num_vars = stoi(words[2]);
                 num_cls = stoi(words[3]);
+                //check bounds on no_vars and no_cls
+                if (num_vars-1 > std::numeric_limits<var_t>::max()) {
+                    std::cout << "c parser: too many variables (use at most" << std::numeric_limits<var_t>::max() << " variables)" << std::endl;
+                    throw std::runtime_error( "c too many variables" );
+                };
+                if (num_cls-1 > std::numeric_limits<var_t>::max()) {
+                    std::cout << "c parser: too many clauses (use at most" << std::numeric_limits<var_t>::max() << " clauses)" << std::endl;
+                    throw std::runtime_error( "c too many variables" );
+                };
             } else {
                 //line contains clause
-                vec< lineral > cl;
+                cl.clear();
                 
                 //check if clause is in XOR-clause notation or XNF-notation!
                 if(words[0] == "x") {
@@ -131,13 +142,19 @@ parsed_xnf read_xnf(const std::string &fname) {
                     }
                     if (need_0) idxs.push_back( 0 );
                     
-                    if (idxs.size() > 0) cl.push_back( lineral(idxs) );
+                    if (idxs.size() > 0) cl.emplace_back( idxs );
                 }
                 //add clause to cls
 
                 //NOTE here we assume that num_vars is large enough to fit all idxs!
                 //if (cl.size() > 0) cls.push_back( xcls(cl, num_vars) );
-                if (cl.size() > 0) cls.push_back( cl );
+                if (cl.size() > 0) {
+                    if(cl.size()>2) {
+                        std::cout << "c file \'" << fname << "\' not in 2-XNF!" << std::endl;
+                        throw std::runtime_error("input is not in 2-XNF!");
+                    }
+                    cls.emplace_back( std::move(cl) );
+                }
             }
         }
         file.close();
@@ -188,8 +205,18 @@ std::string preprocess(const vec< vec<lineral> >& xnf, const options& opts, stat
             const auto IG = impl_graph( xnf, opts );
             out = IG.to_xnf_string();
         };
-    } catch(const std::exception& e) {
-        std::cout << "c input file not in 2-XNF" << std::endl;
+    } 
+    catch(const std::out_of_range& e) {
+        std::cout << "c exception: " << e.what() << std::endl;
+    #ifdef USE_TRIE
+        std::cout << "c Data structure for vertex labels cannot handle the large number of different nodes. (Try compiling without USE_TRIE defined.)" << std::endl;
+    #else 
+        std::cout << "c Data structure for vertex labels cannot handle the large number of different nodes." << std::endl;
+    #endif
+    }
+    catch(const std::exception& e) {
+        std::cout << "c exception: " << e.what() << std::endl;
+        std::cout << "c unexpected error occured!" << std::endl;
     }
     return out;
 };
@@ -240,8 +267,19 @@ int solve(const vec< vec<lineral> >& xnf, const options& opts, stats& s) {
         } else {
             IG.dpll_solve(s);
         };
-    } catch(const std::exception& e) {
-        std::cout << "c input file not in 2-XNF" << std::endl;
+    }
+    catch(const std::out_of_range& e) {
+        std::cout << "c exception: " << e.what() << std::endl;
+    #ifdef USE_TRIE
+        std::cout << "c Data structure for vertex labels cannot handle the large number of different nodes. (Try compiling without USE_TRIE defined.)" << std::endl;
+    #else 
+        std::cout << "c Data structure for vertex labels cannot handle the large number of different nodes." << std::endl;
+    #endif
+        return 1;
+    }
+    catch(const std::exception& e) {
+        std::cout << "c exception: " << e.what() << std::endl;
+        std::cout << "c unexpected error occured!" << std::endl;
         return 1;
     }
     return 0;
