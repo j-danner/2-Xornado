@@ -24,11 +24,17 @@ Optional arguments:
 -t --time-out                	timeout in seconds (negative to deactivate) [default: -1]
 ```
 
+
+#### XNF Format
+
 Encode your 2-XNF problem in a DIMACS-like format with header `p xnf n_vars n_cls` and where each clause is in a new line where linerals, a XOR of literals, are encoded as literals connected by `+` and the clause terminates with `0`.
 
 The XNF clause $(\neg X_1 \oplus X_2 \oplus X_3) \vee (X_4\oplus X_5)$ is
 encoded as `-1+2+3 4+5 0`.
 
+#### ANF Input
+
+To solve systems of (quadratic) polynomials, use our `anf_to_2xnf` conversion tool from [here](https://github.com/Wrazlmumfp/anf_to_2xnf.git) to encode the polynomials as an instance in 2-XNF.
 
 ### Build
 
