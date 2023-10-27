@@ -121,7 +121,7 @@ int main(int argc, char const *argv[])
     
     //score opts
     program.add_argument("-pp","--preprocess")
-        .help("expects 'no', 'scc', 'fls_scc', or 'fls_scc_ee'")
+        .help("expects 'no', 'scc', 'fls_scc' (failed lineral search + SCC), or 'fls_scc_ee' (failed lineral search + SCC + edge extension)")
         .default_value(std::string("fls_scc"))
         .action([](const std::string& value) {
             static const vec<std::string> choices = { "no","scc","fls_scc","fls_scc_ee" };
@@ -133,8 +133,7 @@ int main(int argc, char const *argv[])
         });
     
     program.add_argument("-ppo","--preprocess-out")
-        .help("fname for pre-processed input xnf; output xnf is equivalent to input xnf")
-        .default_value(std::string(""));
+        .help("path for output of xnf after pre-processing (input and output xnf are equivalent)");
     
     ////jobs
     //program.add_argument("-j","--jobs")
