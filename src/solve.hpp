@@ -18,7 +18,9 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #pragma once
-//offers function to solve (and parse) 2-xnf instances
+//offers function to solve (and parse) xnf instances and guessing path files
+
+#include <set>
 
 #include "misc.hpp"
 #include "LA/lineral.hpp"
@@ -66,10 +68,27 @@ struct parsed_xnf {
 /**
  * @brief parses file with name fname
  * 
- * @param fname xnf-file name
- * @return std::pair<std::pair<var_t,var_t>, vec< vec<lineral> > > parsed num-cls, num-vars and parsed linerals
+ * @param fname guessing path file name; each line contains one index
+ * @return reordering of variables, s.t. lex is the correct order
  */
-parsed_xnf read_xnf(const std::string& fname);
+reordering parse_gp(const std::string& fname);
+
+/**
+ * @brief parses file with name fname
+ * 
+ * @param fname xnf-file name
+ * @param reordering permutation of indices
+ * @return parsed_Xnf parsed num-cls, num-vars and parsed xlits
+ */
+parsed_xnf parse_file_gp(const std::string& fname, const reordering& P);
+
+/**
+ * @brief parses file with name fname
+ * 
+ * @param fname xnf-file name
+ * @return parsed_Xnf parsed num-cls, num-vars and parsed xlits
+ */
+parsed_xnf parse_file(const std::string& fname);
 
 /**
  * @brief print parsed xcls to string

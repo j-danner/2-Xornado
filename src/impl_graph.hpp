@@ -19,6 +19,8 @@
 
 #pragma once
 
+#define FULL_REDUCTION
+
 #include <stack>
 #include <math.h>
 #include <map>
@@ -32,8 +34,8 @@
 #include "LA/lineral.hpp"
 #include "LA/lineqs.hpp"
 
-#define Lsys xsys_stack.top()
-#define linsys xsys_stack.top().back()
+#define Lsys xsys_stack.back()
+#define linsys xsys_stack.back().back()
 
 #include "vl/vl.hpp"
 
@@ -58,7 +60,7 @@ class impl_graph : public graph
     /**
      * @brief stack of lists of xsyses for backtracking
      */
-    std::stack< std::list<LinEqs> > xsys_stack;
+    std::list< std::list<LinEqs> > xsys_stack;
 
 #ifndef FULL_REDUCTION
     /**
@@ -110,7 +112,7 @@ class impl_graph : public graph
       //(1) save state
       auto g_state = std::move(get_state());
       auto vl_state = std::move(vl.get_state());
-      xsys_stack.emplace( std::list<LinEqs>() );
+      xsys_stack.emplace_back( std::list<LinEqs>() );
       add_new_xsys( lit );
 
       //(2) call crGCP
@@ -118,12 +120,12 @@ class impl_graph : public graph
       crGCP_no_schedule(s);
       //sum over all list els in xsys_stack.top
       LinEqs implied_lits;
-      for(const auto& sys : xsys_stack.top()) implied_lits += sys;
+      for(const auto& sys : xsys_stack.back()) implied_lits += sys;
 
       //(3) backtrack state
       vl.backtrack( std::move(vl_state), vl_stack.size() );
       //revert assignments
-      xsys_stack.pop();
+      xsys_stack.pop_back();
       backtrack( std::move(g_state) );
       assert( assert_data_structs() );
 
@@ -166,7 +168,7 @@ class impl_graph : public graph
     /**
      * @brief Construct a new impl graph
      * 
-     * @param parsed_xnf pair of options and clauses, as returned by read_xnf
+     * @param parsed_xnf pair of options and clauses, as returned by parse_file
      */
     impl_graph(parsed_xnf& p_xnf) : impl_graph(p_xnf.cls, options(p_xnf.num_vars, p_xnf.num_cls)) {};
 
@@ -183,7 +185,7 @@ class impl_graph : public graph
           assignments[lt] = L.get_linerals(idx);
       }
     #endif
-      xsys_stack.top().emplace_back(L);
+      xsys_stack.back().emplace_back(L);
     };
 
     //various implementations to choose from for the core update functions!
@@ -286,6 +288,11 @@ class impl_graph : public graph
      * @brief branch on making the largest bottleneck
      */
     std::pair< LinEqs, LinEqs > max_bottleneck() const;
+
+    /**
+     * @brief branch on lexicographically next un-assigned idx
+     */
+    std::pair< LinEqs, LinEqs > lex() const;
 
     /**
      * @brief branch on making the longest path a cycle

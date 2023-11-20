@@ -134,6 +134,12 @@ int main(int argc, char const *argv[])
     
     program.add_argument("-ppo","--preprocess-out")
         .help("path for output of xnf after pre-processing (input and output xnf are equivalent)");
+
+            
+    //guessing path input
+    program.add_argument("-gp","--guessing-path")
+        .help("path to file storing guessing path; each line contains exactly one number corr to the corresponding variable; USE WITH CAUTION!");
+
     
     ////jobs
     //program.add_argument("-j","--jobs")
@@ -172,6 +178,7 @@ int main(int argc, char const *argv[])
     else if(dh_str=="mp") dh = dec_heu::mp;
     else if(dh_str=="mr") dh = dec_heu::mr;
     else if(dh_str=="mbn") dh = dec_heu::mbn;
+    else if(dh_str=="lex") dh = dec_heu::lex;
     
     auto fls_str = program.get<std::string>("-fls");
     fls_alg fls = fls_alg::no;
@@ -202,6 +209,10 @@ int main(int argc, char const *argv[])
 
     const bool only_preprocess = program.is_used("-ppo");
     const std::string pp_out = only_preprocess ? program.get<std::string>("-ppo") : "";
+        
+    const std::string gp_fname = program.is_used("-gp") ? program.get<std::string>("-gp") : "";
+    if(program.is_used("-gp")) dh = dec_heu::lex;
+
 
     //auto jobs = program.get<int>("-j");
     int jobs = 1;
@@ -219,10 +230,13 @@ int main(int argc, char const *argv[])
 
     //parse file
     try {
-        parsed_xnf p_xnf = read_xnf( fname );
+        reordering P = parse_gp( gp_fname );
+        parsed_xnf p_xnf = P.size()==0 ? parse_file( fname ) : parse_file_gp( fname, P );
+
 
         //init options
-        options opts( p_xnf.num_vars, p_xnf.num_cls, dh, fls, fls_s, upd, score, ext, pp, jobs, verb, time_out );
+        options opts( p_xnf.num_vars, p_xnf.num_cls, dh, fls, fls_s, upd, score, ext, pp, jobs, verb, time_out, P );
+
 
         if(only_preprocess) {
             std::string out = preprocess(p_xnf.cls, opts, s);

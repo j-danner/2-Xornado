@@ -65,12 +65,47 @@ void write_str(const std::string& fname, const std::string& out) {
     myfile.close();
 }
 
-parsed_xnf read_xnf(const std::string &fname) {
+reordering parse_gp(const std::string& fname) {
+    reordering P;
+
+    if(fname.size()==0) return P;
+
+    std::ifstream file(fname);
+    if ( file.fail() ) {
+        std::cout << "c file \'" << fname << "\' not found!" << std::endl; //TODO do proper error handling, i.e., throw exception?!
+        throw std::runtime_error("file not found!");
+    }
+    std::set<var_t> already_inserted;
+    if(file.is_open()) {
+        std::string line;
+        var_t idx = 1;
+        while (std::getline(file, line)) {
+            if (line.length() == 0 || line[0] == 'c') continue; //ignore line
+            auto words = split(line, " ");
+            const int val = stoi(words[0]);
+            assert(val>0);
+
+            if(already_inserted.contains((var_t) val)) continue;
+            P.insert((var_t) val, idx);
+            already_inserted.insert((var_t) val);
+
+            ++idx;
+        }
+    }
+
+    return P;
+}
+
+parsed_xnf parse_file(const std::string& fname) { reordering P; return parse_file_gp(fname, P); };
+
+
+parsed_xnf parse_file_gp(const std::string &fname, const reordering& P) {
     var_t num_vars = 0;
     var_t num_cls = 0;
     
     vec< vec<lineral> > cls;
     vec< lineral > cl;
+    vec< var_t > idxs;
 
     std::ifstream file(fname);
     if ( file.fail() ) {
@@ -121,14 +156,13 @@ parsed_xnf read_xnf(const std::string &fname) {
                     }
                     //otherwise read lineral
                     auto lit = split(words[i], "+");
-                    vec< var_t > idxs;
+                    idxs.clear();
                     bool need_0 = true;
-                    for (auto &&v : lit)
-                    {
+                    for (auto &&v : lit) {
                         int v_ = stoi(v);
                         //std::cout << v << std::endl;
                         if (v_>0) {
-                            idxs.push_back( (var_t) v_ );
+                            idxs.emplace_back( P.at((var_t) v_) );
                             if (v_ > num_vars) {
                                 throw std::invalid_argument( "c provided clauses include larger vars than announced by header!" );
                             };
@@ -136,13 +170,12 @@ parsed_xnf read_xnf(const std::string &fname) {
                             //not standard! (interprets '+0' as one '-')
                             need_0 ^= true;
                         } else {
-                            idxs.push_back( (var_t) -v_ );
+                            idxs.push_back( P.at((var_t) -v_) );
                             need_0 ^= true;
                         }
                     }
-                    if (need_0) idxs.push_back( 0 );
                     
-                    if (idxs.size() > 0) cl.emplace_back( idxs );
+                    if (idxs.size() > 0) cl.emplace_back( std::move(idxs), need_0, false );
                 }
                 //add clause to cls
 
@@ -291,6 +324,7 @@ stats solve(const vec< vec<lineral> >& xnf, const options& opts) {
     solve(xnf, opts, s);
     //print stats
     s.end = std::chrono::steady_clock::now();
+    if(opts.P.size()>0) s.reorder_sol(opts.P);
     s.print_final();
     return s;
 }

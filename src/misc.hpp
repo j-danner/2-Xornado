@@ -27,8 +27,11 @@
 #include <vector>
 #include <iostream>
 #include <iomanip>
+#include <unordered_map>
 //other
 #include <omp.h>
+#include "robin_hood-3.11.5/robin_hood.h"
+
 
 //verbosity output
 #ifdef VERBOSITY
@@ -50,12 +53,42 @@ template<class T>
 using vec = std::vector<T>;
 
 
-enum class dec_heu { fv, mp, mr, mbn};
+enum class dec_heu { fv, mp, mr, mbn, lex};
 enum class fls_alg { no, trivial, trivial_cc, full};
 enum class upd_alg { ts, hf, par, hfd};
 enum class sc {active, inactive};
 enum class constr { simple, extended};
 enum class preproc { no, scc, fls_scc, fls_scc_ee };
+
+/**
+ * @brief class that handles reordering according to guessing path
+ */
+class reordering {
+  private:
+    //TODO use faster hashmap
+  #ifdef NDEBUG
+    robin_hood::unordered_flat_map<var_t,var_t> P;
+  #else
+    std::unordered_map<var_t,var_t> P;
+  #endif
+
+  public:
+    reordering() {};
+    reordering(const reordering& o) : P(o.P) {};
+    reordering(reordering&& o) : P(std::move(o.P)) {};
+
+    std::size_t size() const noexcept { return P.size(); };
+
+    void insert(const var_t& ind, const var_t& pos) {
+      if(at(pos)==ind) return;
+      const auto P_ind = at(ind);
+      const auto P_pos = at(pos);
+      P[pos] = P_ind;
+      P[ind] = P_pos;
+    };
+    const var_t& at(const var_t& ind) const noexcept { return P.contains(ind) ? P.at(ind) : ind; };
+};
+
 
 /**
  * @brief struct that holds options for the various heuristic choices
@@ -79,6 +112,8 @@ struct options {
 
     int timeout = 0;
 
+    reordering P;
+
     //TODO selected heuristics!
 
     //default settings
@@ -87,6 +122,7 @@ struct options {
     options(var_t n_vars, var_t n_cls) : num_vars(n_vars), num_cls(n_cls) {};
     options(var_t n_vars, var_t n_cls, dec_heu dh_, fls_alg fls_, upd_alg upd_, int jobs_, int verb_, int timeout_) : num_vars(n_vars), num_cls(n_cls), dh(dh_), fls(fls_), upd(upd_), jobs(jobs_), verb(verb_), timeout(timeout_) {};
     options(var_t n_vars, var_t n_cls, dec_heu dh_, fls_alg fls_, int fls_s_, upd_alg upd_, sc score_, constr ext_, preproc pp_, int jobs_, int verb_, int timeout_) : num_vars(n_vars), num_cls(n_cls), dh(dh_), fls(fls_), fls_s(fls_s_), upd(upd_), score(score_), ext(ext_), pp(pp_), jobs(jobs_), verb(verb_), timeout(timeout_) {};
+    options(var_t n_vars, var_t n_cls, dec_heu dh_, fls_alg fls_, int fls_s_, upd_alg upd_, sc score_, constr ext_, preproc pp_, int jobs_, int verb_, int timeout_, reordering P_) : num_vars(n_vars), num_cls(n_cls), dh(dh_), fls(fls_), fls_s(fls_s_), upd(upd_), score(score_), ext(ext_), pp(pp_), jobs(jobs_), verb(verb_), timeout(timeout_), P(P_) {};
 };
 
 
@@ -117,7 +153,7 @@ class stats {
     std::chrono::steady_clock::time_point begin;
     std::chrono::steady_clock::time_point end;
 
-    void print_stats() {
+    void print_stats() const {
       std::cout << "c v_upd     : " << no_vert_upd << std::endl;
       std::cout << "c crGCP     : " << no_crGCP << std::endl;
       std::cout << "c restarts  : " << no_restarts << std::endl;
@@ -125,7 +161,7 @@ class stats {
       std::cout << "c conflicts : " << no_confl << std::endl;
     };
 
-    void print_final() {
+    void print_final() const {
       float total_time = static_cast<float>(std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count())/1000.0f;
       std::cout << std::fixed << std::setprecision(3);
 
@@ -151,6 +187,19 @@ class stats {
       std::cout << "c conflicts  : " << no_confl << std::endl;
       std::cout << "c Total time : " << total_time << " [s]" << std::endl;
 
+      print_sol();
+    }
+    
+    void reorder_sol(const reordering& P) {
+      if(sol.size()==0) return;
+      vec<bool> Psol(sol);
+      for(var_t i=1; i <= sol.size(); ++i) {
+        Psol[i-1] = sol[P.at(i)-1];
+      }
+      sol = std::move(Psol);
+    }
+
+    void print_sol() const {
       if(finished) {
           if(sat) {
               std::cout << "s SATISFIABLE" << std::endl;

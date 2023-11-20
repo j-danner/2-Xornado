@@ -38,7 +38,7 @@ impl_graph::impl_graph(const vec< vec<lineral> >& clss_, const options& opt_) : 
 
         //init stacks
         graph_stack = std::stack< graph_repr >();
-        xsys_stack = std::stack< std::list<LinEqs> >();
+        xsys_stack = std::list< std::list<LinEqs> >();
         //init maps
         vl_stack = std::stack< vert_label_repr >();
     #ifndef FULL_REDUCTION
@@ -112,7 +112,7 @@ impl_graph::impl_graph(const vec< vec<lineral> >& clss_, const options& opt_) : 
         }
 
         //init backtrack-stacks
-        xsys_stack.push( std::list<LinEqs>({ LinEqs(_L) }) );
+        xsys_stack.push_back( std::list<LinEqs>({ LinEqs(_L) }) );
         vl_stack.push( vl.get_state() );
         graph_stack.push( get_state() );
 
@@ -792,6 +792,26 @@ std::pair< LinEqs, LinEqs > impl_graph::max_bottleneck() const {
     return std::move( std::pair< LinEqs, LinEqs >( std::move( tree_xsys ), std::move( inv_tree_xsys ) ) );
 }
 
+vec<bool> assigned;
+std::pair< LinEqs, LinEqs > impl_graph::lex() const {
+    assigned.resize(no_v, false);
+    for(const auto& l_lineqs : xsys_stack) {
+        for(const auto& l : l_lineqs) {
+            for(const auto &[lt,idx] : l.get_pivot_poly_idx()) {
+                assigned[lt] = l.get_linerals(idx).size() == 1;
+            }
+        }
+    }
+    for(var_t i=1; i<opt.num_vars; ++i) {
+        if(!assigned[i]) {
+            //guess single ind
+            var_t lt = i;
+            lineral lt_lit(vec<var_t>({lt}));
+            return std::move( std::pair< LinEqs, LinEqs >( LinEqs( lt_lit ), LinEqs( lt_lit.plus_one() ) ) );
+        }
+    }
+}
+
 std::pair< LinEqs, LinEqs > impl_graph::max_path() const {
     //find max path by traversing TO in reverse
     if(no_e == 0) return first_vert(); //contains no edges, i.e., longest path is of length 1, i.e., we guess a single vertex!
@@ -1348,6 +1368,8 @@ stats impl_graph::dpll_solve(stats& s) {
             decH = &impl_graph::max_reach; break;
         case dec_heu::mbn:
             decH = &impl_graph::max_bottleneck; break;
+        case dec_heu::lex:
+            decH = &impl_graph::lex; break;
         default:
             decH = &impl_graph::max_path; break;
     }
@@ -1380,7 +1402,7 @@ stats impl_graph::dpll_solve(stats& s) {
             }
             //decay + bump scores
             if(opt.score == sc::active) { //only update scores if used!
-                for(const auto& sys : xsys_stack.top() ){
+                for(const auto& sys : xsys_stack.back() ){
                     bump_score(sys);
                 }
                 decay_score();
@@ -1397,7 +1419,7 @@ stats impl_graph::dpll_solve(stats& s) {
                 }
             }
         #endif
-            xsys_stack.pop();
+            xsys_stack.pop_back();
             backtrack( std::move(graph_stack.top()) );
             assert( assert_data_structs() );
             graph_stack.pop();
@@ -1438,7 +1460,7 @@ stats impl_graph::dpll_solve(stats& s) {
 
             VERB(25, "c " << std::to_string( dl ) << " : " << "decision " << std::to_string(s.no_dec) << " : " << std::to_string(dec.first.size()) << " or " << std::to_string(dec.second.size()) << " eqs")
             VERB(50, "c " << std::to_string( dl ) << " : " << "decision " << std::to_string(s.no_dec) << " namely [" << dec.first.to_str() << "] or [" << dec.second.to_str() << "]")
-            xsys_stack.emplace( std::list<LinEqs>() );
+            xsys_stack.emplace_back( std::list<LinEqs>() );
             add_new_xsys( std::move(dec.first) );
             backtrack_xsys.emplace( std::move(dec.second) );
         }
@@ -1456,10 +1478,10 @@ stats impl_graph::dpll_solve(stats& s) {
     //solution can be deduced from xsys_stack!
     s.sol = vec<bool>(opt.num_vars);
     while(!xsys_stack.empty()) {
-        const auto l_xsys = xsys_stack.top();
+        const auto l_xsys = xsys_stack.back();
         //work through list in reverse order (to solve last linsys first!)
         for (auto sys = l_xsys.rbegin(); sys != l_xsys.rend(); ++sys) sys->solve( s.sol );
-        xsys_stack.pop();
+        xsys_stack.pop_back();
     }
 
     s.sat = true;
