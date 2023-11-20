@@ -220,7 +220,7 @@ class vl_trie
 
     ~vl_trie() {};
 
-    trie_repr get_state() const { return std::move(trie_repr(v_node, num_vs)); };
+    trie_repr get_state() const { return trie_repr(v_node, num_vs); };
 
     void backtrack(trie_repr&& r, const var_t dl) noexcept;
 
@@ -335,7 +335,7 @@ class vl_trie
     inline lineral Vxlit(const var_t &v) const {
       assert( contains(v) || contains(SIGMA(v)) );
       if(contains(v)) {
-        return std::move( at(v) );
+        return at(v);
       } else {
         lineral lit = at( SIGMA(v) );
         lit.add_one();

@@ -177,7 +177,7 @@ lineral lineral::operator+(const lineral &other) const {
     //NOTE back_insterter might lead to repeated reallocations!
     //idxs = DIFF;
 
-    return std::move( lineral(DIFF, p1^other.p1, true) ); //call ctor that does NOT sort DIFF
+    return lineral(DIFF, p1^other.p1, true); //call ctor that does NOT sort DIFF
 };
 
 //in-place operation (!)

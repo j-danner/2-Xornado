@@ -138,12 +138,12 @@ lineral vl_trie::operator[](const var_t v) const {
         idxs.push_back( nodes[curr_node].label );
         curr_node = nodes[curr_node].parent;
     }
-    return std::move( lineral(std::move(idxs), true) );
+    return lineral(std::move(idxs), true);
 };
 
 lineral vl_trie::at(const var_t v) const {
     //if(v_node.at(v)==ROOT && assigned_vert.at(v_node.at(v)) != v) throw std::out_of_range("Label of vertex " + std::to_string(v) + " not found in trie.");
-    return std::move( lineral( vec<var_t>(begin(v),end()), true) );
+    return lineral( vec<var_t>(begin(v),end()), true);
 };
 
 var_t vl_trie::operator[](const lineral& lit) const {
@@ -268,5 +268,5 @@ lineral vl_trie::sum(const var_t lhs, const var_t rhs) const {
   diff.reserve( get_num_nodes()/num_vs + num_vars/10 );
   std::set_symmetric_difference(std::execution::par, begin(lhs), end(), begin(rhs), end(), std::back_inserter(diff));
   //NOTE back_insterter might lead to repeated reallocations!
-  return std::move( lineral(std::move(diff), true) ); //call ctor that does NOT sort diff
+  return lineral(std::move(diff), true); //call ctor that does NOT sort diff
 }

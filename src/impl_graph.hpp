@@ -19,8 +19,6 @@
 
 #pragma once
 
-#define FULL_REDUCTION
-
 #include <stack>
 #include <math.h>
 #include <map>
@@ -110,8 +108,8 @@ class impl_graph : public graph
      */
     LinEqs implied_xlits(lineral& lit) {
       //(1) save state
-      auto g_state = std::move(get_state());
-      auto vl_state = std::move(vl.get_state());
+      auto g_state = get_state();
+      auto vl_state = vl.get_state();
       xsys_stack.emplace_back( std::list<LinEqs>() );
       add_new_xsys( lit );
 
@@ -139,19 +137,19 @@ class impl_graph : public graph
 
       if(v1_contained) {
         if(v2_contained) {
-          return std::move( vl.sum(v1,v2) );
+          return vl.sum(v1,v2);
         } else {
-          lineral tmp = std::move( vl.sum(v1,SIGMA(v2)) );
+          lineral tmp = vl.sum(v1,SIGMA(v2));
           tmp.add_one();
           return tmp;
         }
       } else {
         if(v2_contained) {
-          lineral tmp = std::move( vl.sum(SIGMA(v1),v2) );
+          lineral tmp = vl.sum(SIGMA(v1),v2);
           tmp.add_one();
           return tmp;
         } else {
-          return std::move( vl.sum(SIGMA(v1),SIGMA(v2)) );
+          return vl.sum(SIGMA(v1),SIGMA(v2));
         }
       }
     }
@@ -198,10 +196,10 @@ class impl_graph : public graph
     LinEqs update_graph_hash_fight_dev(stats& s, const LinEqs& L);
     
     //wrappers for update_funcs when stats are irrelevant
-    inline LinEqs update_graph(const LinEqs& L) { return std::move( update_graph(s, L) ); };
-    inline LinEqs update_graph_par(const LinEqs& L) { return std::move( update_graph_par(s, L) ); };
-    inline LinEqs update_graph_hash_fight(const LinEqs& L) { return std::move( update_graph_hash_fight(s, L) ); };
-    inline LinEqs update_graph_hash_fight_dev(const LinEqs& L) { return std::move( update_graph_hash_fight_dev(s, L) ); };
+    inline LinEqs update_graph(const LinEqs& L) { return update_graph(s, L); };
+    inline LinEqs update_graph_par(const LinEqs& L) { return update_graph_par(s, L); };
+    inline LinEqs update_graph_hash_fight(const LinEqs& L) { return update_graph_hash_fight(s, L); };
+    inline LinEqs update_graph_hash_fight_dev(const LinEqs& L) { return update_graph_hash_fight_dev(s, L); };
 
     //in-processing
     LinEqs scc_analysis();

@@ -167,11 +167,11 @@ impl_graph::impl_graph(const vec< vec<lineral> >& clss_, const options& opt_) : 
 
 #ifdef USE_TRIE
     LinEqs impl_graph::update_graph(stats& s, const LinEqs& L) {
-        return std::move(update_graph_hash_fight_dev(s,L));
+        return update_graph_hash_fight_dev(s,L);
     };
     
     LinEqs impl_graph::update_graph_par(stats& s, const LinEqs& L) {
-        return std::move( update_graph(s,L) );
+        return update_graph(s,L);
     };
     
     //one global var for lineral lit, reduces memory allocations
@@ -184,7 +184,7 @@ impl_graph::impl_graph(const vec< vec<lineral> >& clss_, const options& opt_) : 
         //return std::move( update_graph(s, L) );
         assert( L.is_consistent() );
         auto new_L = vec<lineral>();
-        if(L.size() == 0) return std::move( LinEqs(std::move(new_L)) );
+        if(L.size() == 0) return LinEqs(std::move(new_L));
     
         //update in two steps:
         // (1) in parallel: reduce all lits and create new map Vxlit (linerals -> verts)
@@ -236,7 +236,7 @@ impl_graph::impl_graph(const vec< vec<lineral> >& clss_, const options& opt_) : 
     
         assert( assert_data_structs() );
     
-        return std::move( LinEqs(std::move(new_L)) );
+        return LinEqs(std::move(new_L));
     };
     
     LinEqs impl_graph::update_graph_hash_fight_dev(stats& s, const LinEqs& L) {
@@ -247,7 +247,7 @@ impl_graph::impl_graph(const vec< vec<lineral> >& clss_, const options& opt_) : 
         //return std::move( update_graph(L) );
         assert( L.is_consistent() );
         auto new_L = vec<lineral>();
-        if(L.size() == 0) return std::move( LinEqs(std::move(new_L)) );
+        if(L.size() == 0) return LinEqs(std::move(new_L));
     
         //if(!assignments[9].is_zero()) {
         //    lit.reset();
@@ -336,7 +336,7 @@ impl_graph::impl_graph(const vec< vec<lineral> >& clss_, const options& opt_) : 
     
         assert( assert_data_structs() );
         
-        return std::move( LinEqs(std::move(new_L)) );
+        return LinEqs(std::move(new_L));
         //return std::move( update_graph(L) );
     };
     
@@ -616,7 +616,7 @@ std::pair< LinEqs, LinEqs > impl_graph::first_vert() const {
 #ifndef FULL_REDUCTION
     assert(assignments[lt].is_zero());
 #endif
-    return std::move( std::pair< LinEqs, LinEqs >( LinEqs( lt_lit ), LinEqs( lt_lit.plus_one() ) ) );
+    return std::pair< LinEqs, LinEqs >( LinEqs( lt_lit ), LinEqs( lt_lit.plus_one() ) );
 }
 
 vec<lineral> tree_xlits;
@@ -704,7 +704,7 @@ std::pair< LinEqs, LinEqs > impl_graph::max_reach() const {
     }
     const LinEqs inv_tree_xsys = LinEqs( std::move(tree_xlits) );
 
-    return std::move( std::pair< LinEqs, LinEqs >( std::move( tree_xsys ), std::move( inv_tree_xsys ) ) );
+    return std::pair< LinEqs, LinEqs >( std::move( tree_xsys ), std::move( inv_tree_xsys ) );
 }
 
 std::pair< LinEqs, LinEqs > impl_graph::max_bottleneck() const {
@@ -789,7 +789,7 @@ std::pair< LinEqs, LinEqs > impl_graph::max_bottleneck() const {
     const LinEqs inv_tree_xsys = LinEqs( std::move(tree_xlits) );
 
     
-    return std::move( std::pair< LinEqs, LinEqs >( std::move( tree_xsys ), std::move( inv_tree_xsys ) ) );
+    return std::pair< LinEqs, LinEqs >( std::move( tree_xsys ), std::move( inv_tree_xsys ) );
 }
 
 vec<bool> assigned;
@@ -807,9 +807,10 @@ std::pair< LinEqs, LinEqs > impl_graph::lex() const {
             //guess single ind
             var_t lt = i;
             lineral lt_lit(vec<var_t>({lt}));
-            return std::move( std::pair< LinEqs, LinEqs >( LinEqs( lt_lit ), LinEqs( lt_lit.plus_one() ) ) );
+            return std::pair< LinEqs, LinEqs >( LinEqs( lt_lit ), LinEqs( lt_lit.plus_one() ) );
         }
     }
+    assert(false);
 }
 
 std::pair< LinEqs, LinEqs > impl_graph::max_path() const {
@@ -862,11 +863,11 @@ std::pair< LinEqs, LinEqs > impl_graph::max_path() const {
     const LinEqs cycle( std::move(cycle_xlits) );
     //if( cycle.size() < no_cycle.size() ) std::swap( cycle, no_cycle ); //NOTE negative impact on performance with random instances!
 #ifdef FULL_REDUCTION
-    return std::move( std::pair<LinEqs,LinEqs>(std::move(cycle), std::move(no_cycle)) );
+    return std::pair<LinEqs,LinEqs>(std::move(cycle), std::move(no_cycle));
 #else
     //we might have already made this exact guess (or one that 'contains' it), however it did not 'remove' the current path and make it an SCC (as it should have!); so we need to guess differently! --> use max_reach heuristic, which certainly leads to propagation and reductions!
     if(no_cycle.size()==0 || cycle.size()==0) return max_reach();
-    else return std::move( std::pair<LinEqs,LinEqs>(std::move(cycle), std::move(no_cycle)) );
+    else return std::pair<LinEqs,LinEqs>(std::move(cycle), std::move(no_cycle));
 #endif
 }
 
@@ -930,21 +931,21 @@ std::pair< LinEqs, LinEqs > impl_graph::max_score_path() const {
         const LinEqs cycle( std::move(cycle_xlits) );
         //if( cycle.size() < no_cycle.size() ) std::swap( cycle, no_cycle ); //NOTE negative impact on performance with random instances!
     #ifdef FULL_REDUCTION
-        return std::move( std::pair<LinEqs,LinEqs>(std::move(cycle), std::move(no_cycle)) );
+        return std::pair<LinEqs,LinEqs>(std::move(cycle), std::move(no_cycle));
     #else
         //we might have already made this exact guess (or one that 'contains' it), however it did not 'remove' the current path and make it an SCC (as it should have!); so we need to guess differently! --> use max_reach heuristic, which certainly leads to propagation and reductions!
         if(cycle.size()==0) return max_reach();
-        else return std::move( std::pair<LinEqs,LinEqs>(std::move(cycle), std::move(no_cycle)) );
+        else return std::pair<LinEqs,LinEqs>(std::move(cycle), std::move(no_cycle));
     #endif
     } else {
         //path has length 1 (!), i.e., we only guess a single vert!
-        return std::move( std::pair< LinEqs, LinEqs >( LinEqs( std::move( vl.Vxlit( v_max_path_src).add_one() ) ), LinEqs( std::move( vl.Vxlit( v_max_path_src) ) ) ) );
+        return std::pair< LinEqs, LinEqs >( LinEqs( std::move( vl.Vxlit( v_max_path_src).add_one() ) ), LinEqs( std::move( vl.Vxlit( v_max_path_src) ) ) );
     }
 }
 
 //in-processing
 LinEqs impl_graph::fls_no() const {
-    return std::move( LinEqs() );
+    return LinEqs();
 };
 
 LinEqs impl_graph::fls_trivial_cc() const {
@@ -1022,7 +1023,7 @@ LinEqs impl_graph::fls_trivial_cc() const {
             for(const auto& n : get_in_neighbour_range(v)) if(!marked_sigma[IL[n]]) dfs_q.push(n);
         }
     }
-    return std::move( LinEqs( std::move(f_xlits) ) );
+    return LinEqs( std::move(f_xlits) );
 }
 
 LinEqs impl_graph::fls_trivial() const {
@@ -1090,7 +1091,7 @@ LinEqs impl_graph::fls_trivial() const {
             for(const auto& n : get_in_neighbour_range(v)) if(!marked_sigma[IL[n]]) dfs_q.push(n);
         }
     }
-    return std::move( LinEqs( std::move(f_xlits) ) );
+    return LinEqs( std::move(f_xlits) );
     /*
     vec<lineral> new_xlits;
     vec< robin_hood::unordered_flat_set<var_t> > reaches(no_v);
@@ -1158,7 +1159,7 @@ LinEqs impl_graph::fls_full() const {
     std::for_each(new_xlits.begin(), new_xlits.end(), [&](lineral& l){ l.reduce(assignments); });
 #endif
 
-    return std::move( LinEqs( std::move(new_xlits) ) );
+    return LinEqs( std::move(new_xlits) );
 };
 
 LinEqs impl_graph::fls_full_implied() {
@@ -1188,7 +1189,7 @@ LinEqs impl_graph::fls_full_implied() {
     std::for_each(new_xlits.begin(), new_xlits.end(), [&](lineral& l){ l.reduce(assignments); });
 #endif
 
-    return std::move( LinEqs( std::move(new_xlits) ) );
+    return LinEqs( std::move(new_xlits) );
 };
 
 //LinEqs impl_graph::fls_full() {
@@ -1497,7 +1498,7 @@ vec< vec<lineral> > impl_graph::to_xcls() const {
     auto xclss_str = robin_hood::unordered_flat_set<std::string>();
     //go through edges
     for(const auto& v : get_v_range()) {
-        const lineral fp1 = std::move( vl.Vxlit(v).add_one() );
+        const lineral fp1 = vl.Vxlit(v).add_one();
         for(const auto& n : get_out_neighbour_range(v)) {
             const lineral g = vl.Vxlit(n);
             //append (f+1), g to xclss if it is not yet present!
@@ -1527,7 +1528,7 @@ std::string impl_graph::to_xnf_string() const {
     var_t n_cls = 0;
     //go through edges
     for(const auto& v : get_v_range()) {
-        const lineral fp1 = std::move( vl.Vxlit(v).add_one() );
+        const lineral fp1 = vl.Vxlit(v).add_one();
         for(const auto& n : get_out_neighbour_range(v)) {
             const lineral g = vl.Vxlit(n);
             //append (f+1), g to xclss if it is not yet present!
