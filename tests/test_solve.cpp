@@ -24,10 +24,10 @@
 
 
 TEST_CASE( "solving with different options" , "[impl-graph][graph][parser][solve]" ) {
-    auto fname = GENERATE("../../benchmarks/instances/2xnfs/mq/toyexamples/ToyExample-type1-n10-seed1.xnf", "../../benchmarks/instances/2xnfs/mq/toyexamples/ToyExample-type1-n10-seed0.xnf", "../../benchmarks/instances/2xnfs/rand/rand-3-6.xnf", "../../benchmarks/instances/2xnfs/rand/rand-20-40.xnf");
-    //auto fname = "../../benchmarks/instances/2xnfs/rand/rand-10-20.xnf";
-    //auto fname = "../../benchmarks/instances/2xnfs/rand/rand-3-6.xnf";
-    //auto fname = "../../benchmarks/instances/2xnfs/mq/toyexamples/ToyExample-type1-n10-seed0.xnf";
+    auto fname = GENERATE("tests/2xnfs/ToyExample-type1-n10-seed1.xnf", "tests/2xnfs/ToyExample-type1-n10-seed0.xnf", "tests/2xnfs/rand-3-6.xnf", "tests/2xnfs/rand-20-40.xnf");
+    //auto fname = "tests/2xnfs/rand-10-20.xnf";
+    //auto fname = "tests/2xnfs/rand-3-6.xnf";
+    //auto fname = "tests/2xnfs/ToyExample-type1-n10-seed0.xnf";
     auto clss = parse_file( fname );
     auto xnf = clss.cls;
     var_t num_vars = clss.num_vars;
@@ -111,7 +111,7 @@ TEST_CASE( "solving with different options" , "[impl-graph][graph][parser][solve
 }
 
 TEST_CASE("solving with different options -- timeout", "[impl-graph][graph][parser][solve]")  {
-    auto clss = parse_file("../../benchmarks/instances/2xnfs/mq/toyexamples/ToyExample-type1-n20-seed0.xnf");
+    auto clss = parse_file("tests/2xnfs/ToyExample-type1-n20-seed0.xnf");
     auto xnf = clss.cls;
     auto num_vars = clss.num_vars;
     auto num_cls = clss.num_cls;
