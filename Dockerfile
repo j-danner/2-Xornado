@@ -1,8 +1,8 @@
 #dockerfile to build the solver and run benchmarks on it
-FROM debian:bullseye-slim
-COPY . /2-Xornado
-RUN apt update && apt install --assume-yes --no-install-recommends build-essential cmake libm4ri-dev libjemalloc-dev && cd 2xornado && cmake . && make 2xornado
-ENTRYPOINT [ "2-Xornado/2xornado" ]
+FROM debian:bookworm-slim
+COPY . /2xornado
+RUN apt update && apt install --assume-yes --no-install-recommends build-essential cmake pkg-config libm4ri-dev libjemalloc-dev libtbb-dev && cd 2xornado && cmake . && make 2xornado
+ENTRYPOINT [ "2xornado/2xornado" ]
 
 # build image with
 #   docker build -t 2xornado:1.0 .
