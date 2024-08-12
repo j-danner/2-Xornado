@@ -1,0 +1,11 @@
+c IG contains exactly two (corr) scc which yields lin-eqs s.t. we get another scc after simplification
+p xnf 5 5
+-1 2+3 0
+-2+3 4 0
+-4 1 0
+c gives 1+2+3, 1+4
+-1+2 5 0
+-5 3 0
+c gives nothing, but using 1+2+3=0 we have -1+2 = -3, i.e., we have 5 <-> 1+2 we get 1+2+5 (!)
+
+c SAT, e.g., 0 0 0 0 0

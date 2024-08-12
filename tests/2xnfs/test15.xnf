@@ -1,0 +1,7 @@
+c xnf-representation of python xnf-object
+p xnf 2 4
+2 1+2 0
+-1+2 1 0
+2 2 0
+1+2 -1+2 0
+c SAT 1 1

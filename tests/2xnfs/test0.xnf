@@ -1,0 +1,7 @@
+c path that gives one linear eq
+p xnf 3 3
+1 2 0
+-2 3 0
+-3 1 0
+
+c SAT, e.g. 1 0 0

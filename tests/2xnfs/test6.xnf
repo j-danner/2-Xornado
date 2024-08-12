@@ -1,0 +1,7 @@
+c IG should - after using given xor-literal - reduce to 'empty' graph and xsys=[x1+x2]
+p xnf 2 2
+-1+2 0
+c lin eq
+-1 2 0
+
+c SAT, e.g., 0 0
