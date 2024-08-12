@@ -1,14 +1,14 @@
-# 2xnf_solver
+# 2-Xornado
 
 > Graph-based DPLL-SAT Solver for propositional logic formulas in XOR-OR-AND normal form (XNF) implemented in C++20.
 
 ### Usage
 
-Run `2xnf_solver -h` to get the following help:
+Run `2xornado -h` to get the following help:
 
 ```
 Positional arguments:
-fname                        	path to 2xnf-instance
+fname                        	path to 2-xnf-instance
 
 Optional arguments:
 -h --help                    	shows help message and exits [default: false]
@@ -39,7 +39,7 @@ To solve systems of (quadratic) polynomials, use our `anf_to_2xnf` conversion to
 ### Build
 
 On Ubuntu/Debian ensure that you have installed the packages `build-essential`, `cmake`, and `libm4ri-dev` (optionally `libjemalloc-dev`).
-Then run `cmake .` and `make 2xnf_solver`. When the build is finished you will have the executible `2xnf_solver`.
+Then run `cmake .` and `make 2xornado`. When the build is finished you will have the executable `2xornado`.
 
-If this does not work for you or you are running a different OS, you can also use the provided `Dockerfile` to build your own docker-image by `docker build -t 2xnf_solver:1.0 .` and use the solver through `docker_2xnf_solver`.
+If this does not work for you or you are running a different OS, you can also use the provided `Dockerfile` to build your own docker-image by `docker build -t 2xornado:1.0 .` and use the solver through `docker_2xnf_solver`.
 

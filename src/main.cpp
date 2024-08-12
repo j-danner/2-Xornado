@@ -1,4 +1,4 @@
-// Copyright (c) 2022-2023 Julian Danner <julian.danner@uni-passau.de>
+// Copyright (c) 2022-2024 Julian Danner <julian.danner@uni-passau.de>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -29,7 +29,7 @@ int main(int argc, char const *argv[])
     program.add_argument("-v", "--version")
       .action([=]([[maybe_unused]] const std::string& s) {
         std::stringstream out;
-        out << "c 2xnf_solver created by J. Danner (2022-2023)" << std::endl;
+        out << "c 2xornado created by J. Danner (2022-2024)" << std::endl;
         out << "c version:           " << __PROJECT_VERSION << std::endl;
         out << "c compilation date:  " << __DATE__ << " at " << __TIME__ << std::endl;
         out << "c compiler:          " << __CMAKE_CXX_COMPILER_ID << " " << __CMAKE_CXX_COMPILER_VERSION << " using C++" << __CMAKE_CXX_STANDARD << std::endl;

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.12)
 
 # set the project name
-project(2xnf_solver VERSION 1.0)
+project(2xornado VERSION 1.0.1)
 
 # specify the C++ standard
 set(CMAKE_CXX_STANDARD 20)
@@ -40,7 +40,7 @@ else()
     message( FATAL_ERROR "THERE ARE KNOWN BUGS when FULL_REDUCTION is OFF! -- DO NOT DEACTIVATE!")
 endif()
 
-    
+
 #static linking to libstdc++ and libgcc in case of Release build; otherwise give warnings!
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -W -Wall -Wextra -Wswitch -Wsign-compare -static-libgcc -static-libstdc++" )# -ftree-vectorizer-verbose=5 -Weffc++")
 
@@ -49,16 +49,16 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -W -Wall -Wextra -Wswitch -Wsign-compare
 add_subdirectory(src)
 
 # add the executable
-add_executable(2xnf_solver src/main.cpp src/argparse/argparse.hpp)
+add_executable(2xornado src/main.cpp src/argparse/argparse.hpp)
 
 #find openmp package
 find_package(OpenMP REQUIRED)
 
 
-# link libs to 2xnf_solver
-target_link_libraries(2xnf_solver PUBLIC ${EXTRA_LIBS} PRIVATE graph OpenMP::OpenMP_CXX)
+# link libs to 2xornado
+target_link_libraries(2xornado PUBLIC ${EXTRA_LIBS} PRIVATE graph OpenMP::OpenMP_CXX)
 target_include_directories(
-    2xnf_solver PUBLIC
+    2xornado PUBLIC
     "${PROJECT_BINARY_DIR}"
     ${EXTRA_INCLUDES}
     )

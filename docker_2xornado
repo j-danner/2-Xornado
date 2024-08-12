@@ -3,10 +3,10 @@
 if [ -f "$1" ]; then
   #first arg is file
   #run docker solver on file
-  docker run -v $(realpath $1):$(realpath $1) 2xnf_solver:1.0 $(realpath $1) ${@:2}
+  docker run -v $(realpath $1):$(realpath $1) 2xornado:1.0 $(realpath $1) ${@:2}
 else
   #first arg is file
   echo "Note: docker usage needs first argument to be fname."
   echo ""
-  docker run 2xnf_solver:1.0 -h
+  docker run 2xornado:1.0 -h
 fi
