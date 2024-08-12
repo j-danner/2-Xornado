@@ -34,15 +34,14 @@ static void BM_dpll_solve(benchmark::State& state, std::string fname) {
     }
 }
 
-//BENCHMARK_CAPTURE(BM_dpll_solve, rand-20-60, "../../benchmarks/instances/2xnfs/rand/rand-20-60.xnf")->Unit(benchmark::kMillisecond)->Repetitions(10)->DisplayAggregatesOnly(true);
-BENCHMARK_CAPTURE(BM_dpll_solve, rand-20-60, concat(BENCH_FILES, "/instances/2xnfs/rand/rand-20-60.xnf") )->Unit(benchmark::kMillisecond)->MinTime(2);
-BENCHMARK_CAPTURE(BM_dpll_solve, rand-10-20, concat(BENCH_FILES, "/instances/2xnfs/rand/rand-10-20.xnf") )->Unit(benchmark::kMillisecond)->MinTime(2);
-BENCHMARK_CAPTURE(BM_dpll_solve, rand-5-10,  concat(BENCH_FILES, "/instances/2xnfs/rand/rand-5-10.xnf") )->Unit(benchmark::kMillisecond)->MinTime(2);
-BENCHMARK_CAPTURE(BM_dpll_solve, mq-toyexample-type1-n15,  concat(BENCH_FILES, "/instances/2xnfs/mq/toyexamples/ToyExample-type1-n15-seed0.xnf") )->Unit(benchmark::kMillisecond)->MinTime(2);
-BENCHMARK_CAPTURE(BM_dpll_solve, mq-toyexample-type1-n15,  concat(BENCH_FILES, "/instances/2xnfs/mq/toyexamples/ToyExample-type1-n15-seed1.xnf") )->Unit(benchmark::kMillisecond)->MinTime(2);
-BENCHMARK_CAPTURE(BM_dpll_solve, mq-toyexample-type1-n15,  concat(BENCH_FILES, "/instances/2xnfs/mq/toyexamples/ToyExample-type1-n15-seed2.xnf") )->Unit(benchmark::kMillisecond)->MinTime(2);
-BENCHMARK_CAPTURE(BM_dpll_solve, mq-toyexample-type1-n15,  concat(BENCH_FILES, "/instances/2xnfs/mq/toyexamples/ToyExample-type1-n15-seed3.xnf") )->Unit(benchmark::kMillisecond)->MinTime(2);
-BENCHMARK_CAPTURE(BM_dpll_solve, mq-toyexample-type1-n15,  concat(BENCH_FILES, "/instances/2xnfs/mq/toyexamples/ToyExample-type1-n15-seed4.xnf") )->Unit(benchmark::kMillisecond)->MinTime(2);
+BENCHMARK_CAPTURE(BM_dpll_solve, rand-20-60, concat(BENCH_FILES, "/2xnfs/rand-20-60.xnf") )->Unit(benchmark::kMillisecond)->MinTime(2);
+BENCHMARK_CAPTURE(BM_dpll_solve, rand-10-20, concat(BENCH_FILES, "/2xnfs/rand-10-20.xnf") )->Unit(benchmark::kMillisecond)->MinTime(2);
+BENCHMARK_CAPTURE(BM_dpll_solve, rand-5-10,  concat(BENCH_FILES, "/2xnfs/rand-5-10.xnf") )->Unit(benchmark::kMillisecond)->MinTime(2);
+BENCHMARK_CAPTURE(BM_dpll_solve, mq-toyexample-type1-n15,  concat(BENCH_FILES, "/2xnfs/ToyExample-type1-n15-seed0.xnf") )->Unit(benchmark::kMillisecond)->MinTime(2);
+BENCHMARK_CAPTURE(BM_dpll_solve, mq-toyexample-type1-n15,  concat(BENCH_FILES, "/2xnfs/ToyExample-type1-n15-seed1.xnf") )->Unit(benchmark::kMillisecond)->MinTime(2);
+BENCHMARK_CAPTURE(BM_dpll_solve, mq-toyexample-type1-n15,  concat(BENCH_FILES, "/2xnfs/ToyExample-type1-n15-seed2.xnf") )->Unit(benchmark::kMillisecond)->MinTime(2);
+BENCHMARK_CAPTURE(BM_dpll_solve, mq-toyexample-type1-n15,  concat(BENCH_FILES, "/2xnfs/ToyExample-type1-n15-seed3.xnf") )->Unit(benchmark::kMillisecond)->MinTime(2);
+BENCHMARK_CAPTURE(BM_dpll_solve, mq-toyexample-type1-n15,  concat(BENCH_FILES, "/2xnfs/ToyExample-type1-n15-seed4.xnf") )->Unit(benchmark::kMillisecond)->MinTime(2);
 
 int xlit_performance(var_t n, long k) {
     //compute k random lineral additions in n vars
