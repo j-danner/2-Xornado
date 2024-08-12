@@ -22,6 +22,25 @@
 
 #include <catch2/catch_all.hpp>
 
+TEST_CASE( "solving all test xnfs" , "[impl-graph][parser][solve]" ) {
+    int i = GENERATE( range(1,66) );
+    bool is_sat = (i!=3) && (i!=4) && (i!=43);
+    auto fname = "tests/2xnfs/test"+std::to_string(i)+".xnf";
+    auto clss = parse_file( fname );
+    auto xnf = clss.cls;
+    var_t num_vars = clss.num_vars;
+    var_t num_cls = clss.num_cls;
+
+    SECTION( "dh:mbn-fls:no" ) {
+        options opts(num_vars, num_cls, dec_heu::mbn, fls_alg::no, upd_alg::ts, 1, 0, 0);
+        stats s = solve(xnf, opts);
+
+        std::cout << "file " << fname << std::endl;
+
+        CHECK( s.sat == is_sat ); //SAT
+        CHECK( (!is_sat || check_sol(clss.cls, s.sol)) );
+    }
+}
 
 TEST_CASE( "solving with different options" , "[impl-graph][graph][parser][solve]" ) {
     auto fname = GENERATE("tests/2xnfs/ToyExample-type1-n10-seed1.xnf", "tests/2xnfs/ToyExample-type1-n10-seed0.xnf", "tests/2xnfs/rand-3-6.xnf", "tests/2xnfs/rand-20-40.xnf");
