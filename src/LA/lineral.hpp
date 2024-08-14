@@ -61,11 +61,9 @@ class lineral
 
         ~lineral() = default;
 
-        inline void init() noexcept { 
+        inline void init() noexcept {
             //sort
-            std::sort(std::execution::par, idxs.begin(), idxs.end()); 
-            //remove duplicates //TODO do we need this?
-            idxs.erase( std::unique( idxs.begin(), idxs.end() ), idxs.end() );
+            std::sort(std::execution::par, idxs.begin(), idxs.end());
             if( idxs.size()>0 && idxs[0]==0 ) { idxs.erase(idxs.begin()); p1^=true; }
             assert( idxs.empty() || idxs[0]!=0);
         }

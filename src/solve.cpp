@@ -105,7 +105,7 @@ parsed_xnf parse_file_gp(const std::string &fname, const reordering& P) {
     
     vec< vec<lineral> > cls;
     vec< lineral > cl;
-    vec< var_t > idxs;
+    std::set< var_t > idxs;
 
     std::ifstream file(fname);
     if ( file.fail() ) {
@@ -162,7 +162,8 @@ parsed_xnf parse_file_gp(const std::string &fname, const reordering& P) {
                         int v_ = stoi(v);
                         //std::cout << v << std::endl;
                         if (v_>0) {
-                            idxs.emplace_back( P.at((var_t) v_) );
+                            if(idxs.contains(P.at((var_t) v_))) idxs.erase(P.at((var_t) v_));
+                            else                  idxs.emplace(P.at((var_t) v_));
                             if (v_ > num_vars) {
                                 throw std::invalid_argument( "c provided clauses include larger vars than announced by header!" );
                             };
@@ -170,12 +171,13 @@ parsed_xnf parse_file_gp(const std::string &fname, const reordering& P) {
                             //not standard! (interprets '+0' as one '-')
                             need_0 ^= true;
                         } else {
-                            idxs.push_back( P.at((var_t) -v_) );
+                            if(idxs.contains(P.at((var_t) -v_))) idxs.erase(P.at((var_t) -v_));
+                            else                  idxs.emplace(P.at((var_t) -v_));
                             need_0 ^= true;
                         }
                     }
                     
-                    if (idxs.size() > 0) cl.emplace_back( std::move(idxs), need_0, false );
+                    if (idxs.size() > 0 || need_0) cl.emplace_back( vec<var_t>(idxs.begin(),idxs.end()), need_0, true );
                 }
                 //add clause to cls
 
