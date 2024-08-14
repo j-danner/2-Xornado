@@ -98,7 +98,7 @@ impl_graph::impl_graph(const vec< vec<lineral> >& clss_, const options& opt_) : 
         }
 
         std::sort(E.begin(), E.end());
-        std::unique(E.begin(), E.end());
+        E.erase( std::unique(E.begin(), E.end()), E.end());
 
         assert(no_v == 2*vl.size());
 
