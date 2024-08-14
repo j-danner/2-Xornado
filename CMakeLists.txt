@@ -93,7 +93,7 @@ if(benchmark_FOUND)
     target_link_libraries(bench PRIVATE benchmark::benchmark graph)
 endif()
 
-get_filename_component(BENCH_FILES "tests" ABSOLUTE CACHE)
+get_filename_component(BENCH_FILES "tests/2xnfs" ABSOLUTE CACHE)
 add_definitions(-DBENCH_FILES="${BENCH_FILES}")
 
 

@@ -23,6 +23,7 @@
 
 #include <catch2/catch_all.hpp>
 
+const auto xnf_path = std::string(BENCH_FILES);
 
 TEST_CASE( "implication graph construction", "[graph][impl-graph]" ) {
     //construct list of xor-clauses
@@ -572,7 +573,7 @@ TEST_CASE( "update-hf implication graph", "[graph][impl-graph][update-hf]" ) {
 
 TEST_CASE( "parsing and solving instances/2xnfs test instances" , "[impl-graph][graph][parser][scc]" ) {
     SECTION( "test0.xnf" ) {
-        auto clss = parse_file("tests/2xnfs/test0.xnf");
+        auto clss = parse_file(xnf_path + "/test0.xnf");
         auto IG = impl_graph(clss);
         CHECK( IG.assert_data_structs() );
         //CHECK( IG.to_str() == "(x1,x2+1) (x1,x3); (x2+1,x3+1); (x2,x1+1); (x3+1,x1+1); (x3,x2)\n0" );
@@ -586,7 +587,7 @@ TEST_CASE( "parsing and solving instances/2xnfs test instances" , "[impl-graph][
     }
 
     SECTION( "test1.xnf" ) {
-        auto clss = parse_file("tests/2xnfs/test1.xnf");
+        auto clss = parse_file(xnf_path + "/test1.xnf");
         auto IG = impl_graph(clss);
         CHECK( IG.assert_data_structs() );
         auto L = IG.scc_analysis();
@@ -599,7 +600,7 @@ TEST_CASE( "parsing and solving instances/2xnfs test instances" , "[impl-graph][
     }
     
     SECTION( "test2.xnf" ) {
-        auto clss = parse_file("tests/2xnfs/test2.xnf");
+        auto clss = parse_file(xnf_path + "/test2.xnf");
         auto IG = impl_graph(clss);
     
         stats s = IG.dpll_solve();
@@ -609,7 +610,7 @@ TEST_CASE( "parsing and solving instances/2xnfs test instances" , "[impl-graph][
     }
 
     SECTION( "test3.xnf" ) {
-        auto clss = parse_file("tests/2xnfs/test3.xnf");
+        auto clss = parse_file(xnf_path + "/test3.xnf");
         auto IG = impl_graph(clss);
         //CHECK( IG.to_str() == "x1+x5 x2+x5 x3+x5 x4+x5 1" );
     
@@ -618,7 +619,7 @@ TEST_CASE( "parsing and solving instances/2xnfs test instances" , "[impl-graph][
     }
     
     SECTION( "test4.xnf" ) {
-        auto clss = parse_file("tests/2xnfs/test4.xnf");
+        auto clss = parse_file(xnf_path + "/test4.xnf");
         auto IG = impl_graph(clss);
         
         //SCCs lead to inconsistent eqs
@@ -630,7 +631,7 @@ TEST_CASE( "parsing and solving instances/2xnfs test instances" , "[impl-graph][
     }
 
     SECTION( "test5.xnf" ) {
-        auto clss = parse_file("tests/2xnfs/test5.xnf");
+        auto clss = parse_file(xnf_path + "/test5.xnf");
         auto IG = impl_graph(clss);
 
         stats s = IG.dpll_solve();
@@ -640,7 +641,7 @@ TEST_CASE( "parsing and solving instances/2xnfs test instances" , "[impl-graph][
     }
     
     SECTION( "test6.xnf" ) {
-        auto clss = parse_file("tests/2xnfs/test6.xnf");
+        auto clss = parse_file(xnf_path + "/test6.xnf");
         auto IG = impl_graph(clss);
 
         stats s = IG.dpll_solve();
@@ -650,7 +651,7 @@ TEST_CASE( "parsing and solving instances/2xnfs test instances" , "[impl-graph][
     }
     
     SECTION( "test6_.xnf" ) {
-        auto clss = parse_file("tests/2xnfs/test6_.xnf");
+        auto clss = parse_file(xnf_path + "/test6_.xnf");
         auto IG = impl_graph(clss);
 
         stats s = IG.dpll_solve();
@@ -660,7 +661,7 @@ TEST_CASE( "parsing and solving instances/2xnfs test instances" , "[impl-graph][
     }
     
     SECTION( "test7.xnf" ) {
-        auto clss = parse_file("tests/2xnfs/test7.xnf");
+        auto clss = parse_file(xnf_path + "/test7.xnf");
         auto IG = impl_graph(clss);
 
         stats s = IG.dpll_solve();
@@ -670,7 +671,7 @@ TEST_CASE( "parsing and solving instances/2xnfs test instances" , "[impl-graph][
     }
     
     SECTION( "test8.xnf" ) {
-        auto clss = parse_file("tests/2xnfs/test8.xnf");
+        auto clss = parse_file(xnf_path + "/test8.xnf");
         auto IG = impl_graph(clss);
 
         stats s = IG.dpll_solve();
@@ -680,7 +681,7 @@ TEST_CASE( "parsing and solving instances/2xnfs test instances" , "[impl-graph][
     }
     
     SECTION( "test9.xnf" ) {
-        auto clss = parse_file("tests/2xnfs/test9.xnf");
+        auto clss = parse_file(xnf_path + "/test9.xnf");
         auto IG = impl_graph(clss);
 
         stats s = IG.dpll_solve();
@@ -690,7 +691,7 @@ TEST_CASE( "parsing and solving instances/2xnfs test instances" , "[impl-graph][
     }
     
     SECTION( "test10.xnf" ) {
-        auto clss = parse_file("tests/2xnfs/test10.xnf");
+        auto clss = parse_file(xnf_path + "/test10.xnf");
         auto IG = impl_graph(clss);
 
         stats s = IG.dpll_solve();
@@ -700,7 +701,7 @@ TEST_CASE( "parsing and solving instances/2xnfs test instances" , "[impl-graph][
     }
     
     SECTION( "test11.xnf" ) {
-        auto clss = parse_file("tests/2xnfs/test11.xnf");
+        auto clss = parse_file(xnf_path + "/test11.xnf");
         auto IG = impl_graph(clss);
 
         stats s = IG.dpll_solve();
@@ -710,7 +711,7 @@ TEST_CASE( "parsing and solving instances/2xnfs test instances" , "[impl-graph][
     }
     
     SECTION( "test12.xnf" ) {
-        auto clss = parse_file("tests/2xnfs/test12.xnf");
+        auto clss = parse_file(xnf_path + "/test12.xnf");
         auto IG = impl_graph(clss);
 
         stats s = IG.dpll_solve();
@@ -719,7 +720,7 @@ TEST_CASE( "parsing and solving instances/2xnfs test instances" , "[impl-graph][
     }
     
     SECTION( "test13.xnf" ) {
-        auto clss = parse_file("tests/2xnfs/test13.xnf");
+        auto clss = parse_file(xnf_path + "/test13.xnf");
         auto IG = impl_graph(clss);
 
         stats s = IG.dpll_solve();
@@ -728,7 +729,7 @@ TEST_CASE( "parsing and solving instances/2xnfs test instances" , "[impl-graph][
     }
     
     SECTION( "test14.xnf" ) {
-        auto clss = parse_file("tests/2xnfs/test14.xnf");
+        auto clss = parse_file(xnf_path + "/test14.xnf");
         auto IG = impl_graph(clss);
 
         stats s = IG.dpll_solve();
@@ -737,7 +738,7 @@ TEST_CASE( "parsing and solving instances/2xnfs test instances" , "[impl-graph][
     }
     
     SECTION( "test15.xnf" ) {
-        auto clss = parse_file("tests/2xnfs/test15.xnf");
+        auto clss = parse_file(xnf_path + "/test15.xnf");
         auto IG = impl_graph(clss);
         IG.get_opts()->verb = 100;
 
@@ -747,7 +748,7 @@ TEST_CASE( "parsing and solving instances/2xnfs test instances" , "[impl-graph][
     }
     
     SECTION( "test16.xnf" ) {
-        auto clss = parse_file("tests/2xnfs/test16.xnf");
+        auto clss = parse_file(xnf_path + "/test16.xnf");
         auto IG = impl_graph(clss);
         IG.get_opts()->verb = 100;
 
@@ -757,7 +758,7 @@ TEST_CASE( "parsing and solving instances/2xnfs test instances" , "[impl-graph][
     }
 
     SECTION( "test17.xnf" ) {
-        auto clss = parse_file("tests/2xnfs/test17.xnf");
+        auto clss = parse_file(xnf_path + "/test17.xnf");
         auto IG = impl_graph(clss);
         IG.get_opts()->verb = 100;
 
@@ -767,7 +768,7 @@ TEST_CASE( "parsing and solving instances/2xnfs test instances" , "[impl-graph][
     }
 
     SECTION( "test18.xnf" ) {
-        auto clss = parse_file("tests/2xnfs/test18.xnf");
+        auto clss = parse_file(xnf_path + "/test18.xnf");
         auto IG = impl_graph(clss);
         IG.get_opts()->verb = 100;
 
@@ -777,7 +778,7 @@ TEST_CASE( "parsing and solving instances/2xnfs test instances" , "[impl-graph][
     }
     
     SECTION( "test19.xnf" ) {
-        auto clss = parse_file("tests/2xnfs/test19.xnf");
+        auto clss = parse_file(xnf_path + "/test19.xnf");
         auto IG = impl_graph(clss);
         IG.get_opts()->verb = 100;
 
@@ -787,7 +788,7 @@ TEST_CASE( "parsing and solving instances/2xnfs test instances" , "[impl-graph][
     }
 
     SECTION( "test20.xnf" ) {
-        auto clss = parse_file("tests/2xnfs/test20.xnf");
+        auto clss = parse_file(xnf_path + "/test20.xnf");
         auto IG = impl_graph(clss);
         IG.get_opts()->verb = 100;
 
@@ -797,7 +798,7 @@ TEST_CASE( "parsing and solving instances/2xnfs test instances" , "[impl-graph][
     }
 
     SECTION( "test21.xnf" ) {
-        auto clss = parse_file("tests/2xnfs/test21.xnf");
+        auto clss = parse_file(xnf_path + "/test21.xnf");
         auto IG = impl_graph(clss);
         IG.get_opts()->verb = 100;
 
@@ -807,7 +808,7 @@ TEST_CASE( "parsing and solving instances/2xnfs test instances" , "[impl-graph][
     }
 
     SECTION( "test22.xnf" ) {
-        auto clss = parse_file("tests/2xnfs/test22.xnf");
+        auto clss = parse_file(xnf_path + "/test22.xnf");
         auto IG = impl_graph(clss);
         IG.get_opts()->verb = 100;
 
@@ -817,7 +818,7 @@ TEST_CASE( "parsing and solving instances/2xnfs test instances" , "[impl-graph][
     }
 
     SECTION( "test23.xnf" ) {
-        auto clss = parse_file("tests/2xnfs/test23.xnf");
+        auto clss = parse_file(xnf_path + "/test23.xnf");
         auto IG = impl_graph(clss);
         IG.get_opts()->verb = 100;
 
@@ -827,7 +828,7 @@ TEST_CASE( "parsing and solving instances/2xnfs test instances" , "[impl-graph][
     }
 
     SECTION( "test24.xnf" ) {
-        auto clss = parse_file("tests/2xnfs/test24.xnf");
+        auto clss = parse_file(xnf_path + "/test24.xnf");
         auto IG = impl_graph(clss);
         IG.get_opts()->verb = 100;
 
@@ -837,7 +838,7 @@ TEST_CASE( "parsing and solving instances/2xnfs test instances" , "[impl-graph][
     }
 
     SECTION( "test25.xnf" ) {
-        auto clss = parse_file("tests/2xnfs/test25.xnf");
+        auto clss = parse_file(xnf_path + "/test25.xnf");
         auto IG = impl_graph(clss);
         IG.get_opts()->verb = 100;
 
@@ -855,9 +856,9 @@ TEST_CASE( "solving 2xnf test instances with gp" , "[solver][gp]" ) {
         P.insert(4,3);
         P.insert(5,4);
         P.insert(3,5);
-        auto clss_gp = parse_file_gp("tests/2xnfs/test33.xnf", P);
+        auto clss_gp = parse_file_gp(xnf_path + "/test33.xnf", P);
         auto slvr_gp = impl_graph(clss_gp);
-        auto clss = parse_file("tests/2xnfs/test33.xnf");
+        auto clss = parse_file(xnf_path + "/test33.xnf");
         auto slvr = impl_graph(clss);
 
         stats s_gp = slvr_gp.dpll_solve();
@@ -879,10 +880,10 @@ TEST_CASE( "solving 2xnf test instances with gp" , "[solver][gp]" ) {
         P.insert(2,1);
         P.insert(1,2);
         //auto P = parse_gp("gp");
-        auto clss_gp = parse_file_gp("tests/2xnfs/flat30-100.xnf", P);
+        auto clss_gp = parse_file_gp(xnf_path + "/flat30-100.xnf", P);
         auto slvr_gp = impl_graph(clss_gp);
         slvr_gp.get_opts()->dh = dec_heu::lex;
-        auto clss = parse_file("tests/2xnfs/flat30-100.xnf");
+        auto clss = parse_file(xnf_path + "/flat30-100.xnf");
         auto slvr = impl_graph(clss);
         slvr.get_opts()->dh = dec_heu::lex;
 
@@ -906,7 +907,7 @@ TEST_CASE( "implication graph update + backtracking", "[graph][impl-graph][updat
     //solve some first more 'serious' examples
 
     SECTION( "rand-3-6" ) {
-        auto clss = parse_file("tests/2xnfs/rand-3-6.xnf");
+        auto clss = parse_file(xnf_path + "/rand-3-6.xnf");
         auto IG = impl_graph(clss);
 
         stats s = IG.dpll_solve();
@@ -916,7 +917,7 @@ TEST_CASE( "implication graph update + backtracking", "[graph][impl-graph][updat
     }
     
     SECTION( "rand-5-10" ) {
-        auto clss = parse_file("tests/2xnfs/rand-5-10.xnf");
+        auto clss = parse_file(xnf_path + "/rand-5-10.xnf");
         auto IG = impl_graph(clss);
 
         stats s = IG.dpll_solve();
@@ -926,7 +927,7 @@ TEST_CASE( "implication graph update + backtracking", "[graph][impl-graph][updat
     }
     
     SECTION( "rand-10-20" ) {
-        auto clss = parse_file("tests/2xnfs/rand-10-20.xnf");
+        auto clss = parse_file(xnf_path + "/rand-10-20.xnf");
         auto IG = impl_graph(clss);
         IG.get_opts()->dh = dec_heu::mr;
         IG.get_opts()->verb = 100;
@@ -938,7 +939,7 @@ TEST_CASE( "implication graph update + backtracking", "[graph][impl-graph][updat
     }
     
     SECTION( "rand-10-20_2" ) {
-        auto clss = parse_file("tests/2xnfs/rand-10-20_2.xnf");
+        auto clss = parse_file(xnf_path + "/rand-10-20_2.xnf");
         auto IG = impl_graph(clss);
 
         stats s = IG.dpll_solve();
@@ -948,7 +949,7 @@ TEST_CASE( "implication graph update + backtracking", "[graph][impl-graph][updat
     }
     
     SECTION( "rand-10-20_2" ) {
-        auto clss = parse_file("tests/2xnfs/rand-10-20_2.xnf");
+        auto clss = parse_file(xnf_path + "/rand-10-20_2.xnf");
         auto IG = impl_graph(clss);
 
         stats s = IG.dpll_solve();
@@ -958,7 +959,7 @@ TEST_CASE( "implication graph update + backtracking", "[graph][impl-graph][updat
     }
  
     SECTION( "rand-10-30" ) {
-        auto clss = parse_file("tests/2xnfs/rand-10-30.xnf");
+        auto clss = parse_file(xnf_path + "/rand-10-30.xnf");
         auto IG = impl_graph(clss);
 
         stats s = IG.dpll_solve();
@@ -968,7 +969,7 @@ TEST_CASE( "implication graph update + backtracking", "[graph][impl-graph][updat
     }
     
     SECTION( "rand-20-60" ) {
-        auto clss = parse_file("tests/2xnfs/rand-20-60.xnf");
+        auto clss = parse_file(xnf_path + "/rand-20-60.xnf");
         auto IG = impl_graph(clss);
 
         stats s = IG.dpll_solve();
@@ -977,7 +978,7 @@ TEST_CASE( "implication graph update + backtracking", "[graph][impl-graph][updat
     }
     
     //SECTION( "bivium-t500-g177" ) {
-    //    auto clss = parse_file("tests/2xnfs/bivium/bivium-t500-g177.xnf");
+    //    auto clss = parse_file(xnf_path + "/bivium/bivium-t500-g177.xnf");
     //    auto IG = impl_graph(clss);
     //    stats s = IG.dpll_solve();
     //    CHECK( s.sat == true ); //SAT!

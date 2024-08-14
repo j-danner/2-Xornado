@@ -22,10 +22,12 @@
 
 #include <catch2/catch_all.hpp>
 
+const auto xnf_path = std::string(BENCH_FILES);
+
 TEST_CASE( "solving all test xnfs" , "[impl-graph][parser][solve]" ) {
-    int i = GENERATE( range(1,66) );
-    bool is_sat = (i!=3) && (i!=4) && (i!=43);
-    auto fname = "tests/2xnfs/test"+std::to_string(i)+".xnf";
+    int i = GENERATE( range(1,71) );
+    bool is_sat = (i!=3) && (i!=4) && (i!=43) && (i!=69);
+    auto fname = xnf_path + "/test"+std::to_string(i)+".xnf";
     auto clss = parse_file( fname );
     auto xnf = clss.cls;
     var_t num_vars = clss.num_vars;
@@ -43,10 +45,10 @@ TEST_CASE( "solving all test xnfs" , "[impl-graph][parser][solve]" ) {
 }
 
 TEST_CASE( "solving with different options" , "[impl-graph][graph][parser][solve]" ) {
-    auto fname = GENERATE("tests/2xnfs/ToyExample-type1-n10-seed1.xnf", "tests/2xnfs/ToyExample-type1-n10-seed0.xnf", "tests/2xnfs/rand-3-6.xnf", "tests/2xnfs/rand-20-40.xnf");
-    //auto fname = "tests/2xnfs/rand-10-20.xnf";
-    //auto fname = "tests/2xnfs/rand-3-6.xnf";
-    //auto fname = "tests/2xnfs/ToyExample-type1-n10-seed0.xnf";
+    auto fname = GENERATE(xnf_path + "/ToyExample-type1-n10-seed1.xnf", xnf_path + "/ToyExample-type1-n10-seed0.xnf", xnf_path + "/rand-3-6.xnf", xnf_path + "/rand-20-40.xnf");
+    //auto fname = xnf_path + "/rand-10-20.xnf";
+    //auto fname = xnf_path + "/rand-3-6.xnf";
+    //auto fname = xnf_path + "/ToyExample-type1-n10-seed0.xnf";
     auto clss = parse_file( fname );
     auto xnf = clss.cls;
     var_t num_vars = clss.num_vars;
@@ -130,7 +132,7 @@ TEST_CASE( "solving with different options" , "[impl-graph][graph][parser][solve
 }
 
 TEST_CASE("solving with different options -- timeout", "[impl-graph][graph][parser][solve]")  {
-    auto clss = parse_file("tests/2xnfs/ToyExample-type1-n20-seed0.xnf");
+    auto clss = parse_file(xnf_path + "/ToyExample-type1-n20-seed0.xnf");
     auto xnf = clss.cls;
     auto num_vars = clss.num_vars;
     auto num_cls = clss.num_cls;
