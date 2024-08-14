@@ -802,15 +802,16 @@ std::pair< LinEqs, LinEqs > impl_graph::lex() const {
             }
         }
     }
+    var_t lt = 0;
     for(var_t i=1; i<opt.num_vars; ++i) {
         if(!assigned[i]) {
             //guess single ind
-            var_t lt = i;
-            lineral lt_lit(vec<var_t>({lt}));
-            return std::pair< LinEqs, LinEqs >( LinEqs( lt_lit ), LinEqs( lt_lit.plus_one() ) );
+            lt = i;
+            break;
         }
     }
-    assert(false);
+    lineral lt_lit(vec<var_t>({lt}));
+    return std::pair< LinEqs, LinEqs >( LinEqs( lt_lit ), LinEqs( lt_lit.plus_one() ) );
 }
 
 std::pair< LinEqs, LinEqs > impl_graph::max_path() const {
