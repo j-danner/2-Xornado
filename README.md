@@ -42,5 +42,5 @@ To solve systems of (quadratic) polynomials, use our `anf_to_2xnf` conversion to
 On Ubuntu/Debian ensure that you have installed the packages `build-essential`, `cmake`, `libm4ri-dev`, and `libtbb-dev` (optionally `libjemalloc-dev`, `libbenchmark-dev`, `catch2`).
 Then run `cmake .` and `make 2xornado`. When the build is finished you will have the executable `2xornado`.
 
-If this does not work for you or you are running a different OS, you can also use the provided `Dockerfile` to build your own docker-image by `docker build -t 2xornado:1.0 .` and use the solver through `docker_2xornado`.
+If this does not work for you or you are running a different OS, you can also use the docker image `jdanner/2xornado` (download via `docker pull jdanner/2xornado:latest`) or build it yourself using the provided `Dockerfile` by `docker build -t jdanner/2xornado:latest .`. Then access 2-Xornado through `docker_2xornado`.
 
