@@ -1,6 +1,8 @@
 # 2-Xornado
 
-> Graph-based DPLL-SAT Solver for propositional logic formulas in XOR-OR-AND normal form (XNF) implemented in C++20.
+> Graph-based DPLL-SAT Solver for propositional logic formulas in 2-XNF implemented in C++20.
+
+This repository contains the source code of our implementation of Algorithm 8 (`G_2XNF_DPLL`) from our paper *SAT Solving Using XOR-OR-AND Normal Forms* called `2xornado`.
 
 ### Usage
 
@@ -26,21 +28,27 @@ Optional arguments:
 ```
 
 
-#### XNF Format
+#### Input Format
 
-Encode your 2-XNF problem in a DIMACS-like format with header `p xnf n_vars n_cls` and where each clause is in a new line where linerals, a XOR of literals, are encoded as literals connected by `+` and the clause terminates with `0`.
+###### 2-XNF
 
-The XNF clause $(\neg X_1 \oplus X_2 \oplus X_3) \vee (X_4\oplus X_5)$ is
-encoded as `-1+2+3 4+5 0`.
+Informally, a XNF-formula is a CNF-formula, where literals are replaced by XORs of literals, called *linerals*.
+The solver reads 2-XNF-formulas in a DIMACS-like format with header `p xnf n_vars n_cls`, where linerals, a XOR of literals, are encoded as literals connected by `+`; and clauses are terminated by `0`.
+For example, the XNF clause $(\neg X_1 \oplus X_2 \oplus X_3) \vee (X_4\oplus X_5)$ is encoded as `-1+2+3 4+5 0`.
 
-#### ANF Input
+###### 2-CNF-XOR
 
-To solve systems of (quadratic) polynomials, use our `anf_to_2xnf` conversion tool from [here](https://github.com/Wrazlmumfp/anf_to_2xnf.git) to encode the polynomials as an instance in 2-XNF.
+A CNF-XOR formula consists of a CNF formula and XOR constraints on the variables. `2xornado` supports these constraints in the usual encoding as a line starting with `x` followed by the involved literals. For example the constraint $\neg X_1 \oplus X_2$ can be encoded as `x -1 2 0`, but also as the XNF unit clause `-1+2 0`.
+
+###### ANF
+
+To solve systems in algebraic normal form (ANF), use our [`anf_to_2xnf`](https://github.com/Wrazlmumfp/anf_to_2xnf.git) tool to encode the system of polynomials in 2-XNF first.
+
 
 ### Build
 
 On Ubuntu/Debian ensure that you have installed the packages `build-essential`, `cmake`, `libm4ri-dev`, and `libtbb-dev` (optionally `libjemalloc-dev`, `libbenchmark-dev`, `catch2`).
-Then run `cmake .` and `make 2xornado`. When the build is finished you will have the executable `2xornado`.
+Then run `cmake .` and `make 2xornado`.
 
-If this does not work for you or you are running a different OS, you can also use the docker image `jdanner/2xornado` (download via `docker pull jdanner/2xornado:latest`) or build it yourself using the provided `Dockerfile` by `docker build -t jdanner/2xornado:latest .`. Then access 2-Xornado through `docker_2xornado`.
+Alternatively, use the docker image `jdanner/2xornado` (download via `docker pull jdanner/2xornado:latest`) or build it yourself using the provided `Dockerfile` by `docker build -t jdanner/2xornado:latest .`. Then access 2-Xornado through [`docker_2xornado`](docker_2xornado).
 
