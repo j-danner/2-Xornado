@@ -24,7 +24,7 @@
 
 #include "../LA/lineral.hpp"
 
-#include "../parallel-hashmap-1.34/phmap.h"
+#include "../parallel-hashmap/phmap.h"
 #include "../robin_hood-3.11.5/robin_hood.h"
 
 //choose hmap implementation

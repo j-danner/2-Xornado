@@ -27,7 +27,7 @@ add_library(
     vl/vl_hmap.hpp
     vl/vl_hmap.cpp
     #hashmaps
-    parallel-hashmap-1.34/phmap.h
+    parallel-hashmap/phmap.h
     robin_hood-3.11.5/robin_hood.h
 )
 
