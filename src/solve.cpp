@@ -34,6 +34,7 @@
 #include <algorithm>
 #include <stdexcept>
 #include <limits>
+#include <numeric>
 
 
 
@@ -211,9 +212,6 @@ namespace {
 } // namespace
 
 std::string preprocess(const vec< vec<lineral> >& xnf, const options& opts, stats& s) {
-    //set number of omp jobs!
-    omp_set_num_threads(opts.jobs > omp_get_max_threads() ? omp_get_max_threads() : opts.jobs);
-
     //register interupt handler
     std::signal(SIGINT, signal_handler);
     interrupt_handler = [&s]([[maybe_unused]] int signal) {
@@ -271,9 +269,6 @@ std::string to_str(const vec< vec<lineral> >& xclss) {
 
 //main solving func; solves xnf using opts!
 int solve(const vec< vec<lineral> >& xnf, const options& opts, stats& s) {
-    //set number of omp jobs!
-    omp_set_num_threads(opts.jobs > omp_get_max_threads() ? omp_get_max_threads() : opts.jobs);
-
     //register interupt handler
     std::signal(SIGINT, signal_handler);
     interrupt_handler = [&s]([[maybe_unused]] int signal) {

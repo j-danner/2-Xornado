@@ -1571,7 +1571,7 @@ std::string impl_graph::to_str() const noexcept {
         assert( edges[c].size() == CD_out[c] );
     #endif
         //sort color c_idx
-        std::sort( std::execution::par, edges[c].begin(), edges[c].end() );
+        std::sort( edges[c].begin(), edges[c].end() );
     }
 
     //generate string of edges with lexicographic ordering!
@@ -1581,7 +1581,7 @@ std::string impl_graph::to_str() const noexcept {
         //construct strings!
         auto to_str = [&](const var_t dst) -> std::string {return "(" + vl.Vxlit(src).to_str() + "," + vl.Vxlit(dst).to_str() + ")";};
         std::transform(v.begin(), v.end(), out_edges_str.begin(), to_str);
-        std::sort(std::execution::par, out_edges_str.begin(), out_edges_str.end());
+        std::sort(out_edges_str.begin(), out_edges_str.end());
 
         std::stringstream ss;
         std::copy(out_edges_str.begin(), out_edges_str.end(), std::ostream_iterator<std::string>(ss, " "));
@@ -1593,7 +1593,7 @@ std::string impl_graph::to_str() const noexcept {
     }
 
     std::stringstream ss;
-    std::sort(std::execution::par, str_edges.begin(), str_edges.end());
+    std::sort(str_edges.begin(), str_edges.end());
     std::copy(str_edges.begin(), str_edges.end(), std::ostream_iterator<std::string>(ss, "; "));
     std::string result = ss.str();
     if (!result.empty()) {

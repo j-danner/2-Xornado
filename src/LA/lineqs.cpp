@@ -22,6 +22,7 @@
 #include <unordered_map>
 #include <map>
 #include <sstream>
+#include <iterator>
 
 
 
@@ -237,8 +238,8 @@ void LinEqs::solve(vec<bool>& sol_) const {
 std::string LinEqs::to_str() const {
     vec< std::string > str_xlits( linerals.size() );
     auto to_str = [](const lineral l) -> std::string {return l.to_str();};
-    std::transform(std::execution::par, linerals.begin(), linerals.end(), str_xlits.begin(), to_str);
-    std::sort(std::execution::par, str_xlits.begin(), str_xlits.end());
+    std::transform(linerals.begin(), linerals.end(), str_xlits.begin(), to_str);
+    std::sort(str_xlits.begin(), str_xlits.end());
     //rotate if 1 is first element, i.e., if LinEqs is inconsistent!
     if(!is_consistent()) std::rotate(str_xlits.begin(), str_xlits.begin()+1, str_xlits.end());
     std::stringstream ss;

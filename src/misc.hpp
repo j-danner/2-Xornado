@@ -106,8 +106,6 @@ struct options {
     constr ext = constr::extended;
     preproc pp = preproc::no;
     
-    int jobs = omp_get_num_threads();
-    
     int verb = 0;
 
     int timeout = 0;
@@ -120,9 +118,9 @@ struct options {
     options() : num_vars(0), num_cls(0) {};
     options(var_t n_vars) : num_vars(n_vars), num_cls(0) {};
     options(var_t n_vars, var_t n_cls) : num_vars(n_vars), num_cls(n_cls) {};
-    options(var_t n_vars, var_t n_cls, dec_heu dh_, fls_alg fls_, upd_alg upd_, int jobs_, int verb_, int timeout_) : num_vars(n_vars), num_cls(n_cls), dh(dh_), fls(fls_), upd(upd_), jobs(jobs_), verb(verb_), timeout(timeout_) {};
-    options(var_t n_vars, var_t n_cls, dec_heu dh_, fls_alg fls_, int fls_s_, upd_alg upd_, sc score_, constr ext_, preproc pp_, int jobs_, int verb_, int timeout_) : num_vars(n_vars), num_cls(n_cls), dh(dh_), fls(fls_), fls_s(fls_s_), upd(upd_), score(score_), ext(ext_), pp(pp_), jobs(jobs_), verb(verb_), timeout(timeout_) {};
-    options(var_t n_vars, var_t n_cls, dec_heu dh_, fls_alg fls_, int fls_s_, upd_alg upd_, sc score_, constr ext_, preproc pp_, int jobs_, int verb_, int timeout_, reordering P_) : num_vars(n_vars), num_cls(n_cls), dh(dh_), fls(fls_), fls_s(fls_s_), upd(upd_), score(score_), ext(ext_), pp(pp_), jobs(jobs_), verb(verb_), timeout(timeout_), P(P_) {};
+    options(var_t n_vars, var_t n_cls, dec_heu dh_, fls_alg fls_, upd_alg upd_, int verb_, int timeout_) : num_vars(n_vars), num_cls(n_cls), dh(dh_), fls(fls_), upd(upd_), verb(verb_), timeout(timeout_) {};
+    options(var_t n_vars, var_t n_cls, dec_heu dh_, fls_alg fls_, int fls_s_, upd_alg upd_, sc score_, constr ext_, preproc pp_, int verb_, int timeout_) : num_vars(n_vars), num_cls(n_cls), dh(dh_), fls(fls_), fls_s(fls_s_), upd(upd_), score(score_), ext(ext_), pp(pp_), verb(verb_), timeout(timeout_) {};
+    options(var_t n_vars, var_t n_cls, dec_heu dh_, fls_alg fls_, int fls_s_, upd_alg upd_, sc score_, constr ext_, preproc pp_, int verb_, int timeout_, reordering P_) : num_vars(n_vars), num_cls(n_cls), dh(dh_), fls(fls_), fls_s(fls_s_), upd(upd_), score(score_), ext(ext_), pp(pp_), verb(verb_), timeout(timeout_), P(P_) {};
 };
 
 

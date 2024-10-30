@@ -42,7 +42,7 @@ endif()
 
 
 #static linking to libstdc++ and libgcc in case of Release build; otherwise give warnings!
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -W -Wall -Wextra -Wswitch -Wsign-compare -static-libgcc -static-libstdc++ -ltbb" )# -ftree-vectorizer-verbose=5 -Weffc++")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -W -Wall -Wextra -Wswitch -Wsign-compare -static-libgcc -static-libstdc++" )# -ftree-vectorizer-verbose=5 -Weffc++")
 
 
 # add subdirectories
@@ -50,12 +50,6 @@ add_subdirectory(src)
 
 # add the executable
 add_executable(2xornado src/main.cpp src/argparse/argparse.hpp)
-
-#find openmp package
-find_package(OpenMP REQUIRED)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fopenmp")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
-
 
 # link libs to 2xornado
 target_link_libraries(2xornado PUBLIC ${EXTRA_LIBS} PRIVATE graph)

@@ -141,12 +141,6 @@ int main(int argc, char const *argv[])
         .help("path to file storing guessing path; each line contains exactly one number corr to the corresponding variable; USE WITH CAUTION!");
 
     
-    ////jobs
-    //program.add_argument("-j","--jobs")
-    //    .help("parallel jobs (threads) to use (must NOT be larger than actual number of available threads!)")
-    //    .default_value(1)
-    //    .scan<'i', int>();
-    //    
     //verbosity
     #ifdef VERBOSITY
         program.add_argument("-vb", "--verb")
@@ -214,9 +208,6 @@ int main(int argc, char const *argv[])
     if(program.is_used("-gp")) dh = dec_heu::lex;
 
 
-    //auto jobs = program.get<int>("-j");
-    int jobs = 1;
-    
     #ifdef VERBOSITY
         int verb = program.get<int>("-vb");
     #else
@@ -235,7 +226,7 @@ int main(int argc, char const *argv[])
 
 
         //init options
-        options opts( p_xnf.num_vars, p_xnf.num_cls, dh, fls, fls_s, upd, score, ext, pp, jobs, verb, time_out, P );
+        options opts( p_xnf.num_vars, p_xnf.num_cls, dh, fls, fls_s, upd, score, ext, pp, verb, time_out, P );
 
 
         if(only_preprocess) {

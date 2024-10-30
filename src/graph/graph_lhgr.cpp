@@ -19,8 +19,6 @@
 
 #include "graph_lhgr.hpp"
 
-#include <execution>
-
 graph_lhgr::graph_lhgr(const vec< std::pair<var_t,var_t> >& E, const var_t no_v_) noexcept : no_v(no_v_), no_e(2*E.size()) {
     init(E,no_v_);
 };
@@ -385,7 +383,7 @@ std::string graph_lhgr::to_str() const noexcept {
         //}
         assert( edges[c].size() == CD_out[c] );
         //sort color c_idx
-        std::sort( std::execution::par, edges[c].begin(), edges[c].end() );
+        std::sort( edges[c].begin(), edges[c].end() );
     }
 
     //generate string of edges with lexicographic ordering!
@@ -395,7 +393,7 @@ std::string graph_lhgr::to_str() const noexcept {
         //construct strings!
         const var_t src = iter->first;
         auto to_str = [src](const var_t dst) -> std::string {return "("+std::to_string(src)+","+std::to_string(dst)+")";};
-        std::transform(std::execution::par, iter->second.begin(), iter->second.end(), out_edges_str.begin(), to_str);
+        std::transform(iter->second.begin(), iter->second.end(), out_edges_str.begin(), to_str);
 
         std::stringstream ss;
         std::copy(out_edges_str.begin(), out_edges_str.end(), std::ostream_iterator<std::string>(ss, " "));

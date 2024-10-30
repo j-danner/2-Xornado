@@ -34,7 +34,7 @@ TEST_CASE( "solving all test xnfs" , "[impl-graph][parser][solve]" ) {
     var_t num_cls = clss.num_cls;
 
     SECTION( "dh:mbn-fls:no" ) {
-        options opts(num_vars, num_cls, dec_heu::mbn, fls_alg::no, upd_alg::ts, 1, 0, 0);
+        options opts(num_vars, num_cls, dec_heu::mbn, fls_alg::no, upd_alg::ts, 0, 0);
         stats s = solve(xnf, opts);
 
         std::cout << "file " << fname << std::endl;
@@ -55,35 +55,35 @@ TEST_CASE( "solving with different options" , "[impl-graph][graph][parser][solve
     var_t num_cls = clss.num_cls;
 
     SECTION( "dh:fv-fls:no-upd:ts" ) {
-        options opts(num_vars, num_cls, dec_heu::fv, fls_alg::no, upd_alg::ts, 1, 0, 0);
+        options opts(num_vars, num_cls, dec_heu::fv, fls_alg::no, upd_alg::ts, 0, 0);
         stats s = solve(xnf, opts);
         CHECK( s.sat == true ); //SAT
         CHECK( check_sol(clss.cls, s.sol) );
     }
 
     SECTION( "dh:mr-fls:no-upd:ts" ) {
-        options opts(num_vars, num_cls, dec_heu::mr, fls_alg::no, upd_alg::ts, 1, 0, 0);
+        options opts(num_vars, num_cls, dec_heu::mr, fls_alg::no, upd_alg::ts, 0, 0);
         stats s = solve(xnf, opts);
         CHECK( s.sat == true ); //SAT
         CHECK( check_sol(clss.cls, s.sol) );
     }
     
     SECTION( "dh:mr-fls:full-upd:hf" ) {
-        options opts(num_vars, num_cls, dec_heu::mr, fls_alg::full, upd_alg::hf, 1, 0, 0);
+        options opts(num_vars, num_cls, dec_heu::mr, fls_alg::full, upd_alg::hf, 0, 0);
         stats s = solve(xnf, opts);
         CHECK( s.sat == true ); //SAT
         CHECK( check_sol(clss.cls, s.sol) );
     }
     
     SECTION( "dh:mp-fls:trivial-upd:hf" ) {
-        options opts(num_vars, num_cls, dec_heu::mp, fls_alg::trivial, upd_alg::hf, 1, 0, 0);
+        options opts(num_vars, num_cls, dec_heu::mp, fls_alg::trivial, upd_alg::hf, 0, 0);
         stats s = solve(xnf, opts);
         CHECK( s.sat == true ); //SAT
         CHECK( check_sol(clss.cls, s.sol) );
     }
     
     SECTION( "dh:msp-fls:trivial-upd:hfd" ) {
-        options opts(num_vars, num_cls, dec_heu::mp, fls_alg::trivial, upd_alg::hfd, 1, 0, 0);
+        options opts(num_vars, num_cls, dec_heu::mp, fls_alg::trivial, upd_alg::hfd, 0, 0);
         opts.score = sc::active;
         stats s = solve(xnf, opts);
         CHECK( s.sat == true ); //SAT
@@ -91,34 +91,34 @@ TEST_CASE( "solving with different options" , "[impl-graph][graph][parser][solve
     }
 
     SECTION( "dh:mbn-fls:trivial-upd:hfd" ) {
-        options opts(num_vars, num_cls, dec_heu::mbn, fls_alg::trivial, upd_alg::hfd, 1, 0, 0);
+        options opts(num_vars, num_cls, dec_heu::mbn, fls_alg::trivial, upd_alg::hfd, 0, 0);
         stats s = solve(xnf, opts);
         CHECK( s.sat == true ); //SAT
         CHECK( check_sol(clss.cls, s.sol) );
     }
     
-    SECTION( "dh:mp-fls:trivial-upd:hf -- 4 jobs" ) {
-        options opts(num_vars, num_cls, dec_heu::mp, fls_alg::trivial, upd_alg::hf, 4, 0, 0);
+    SECTION( "dh:mp-fls:trivial-upd:hf" ) {
+        options opts(num_vars, num_cls, dec_heu::mp, fls_alg::trivial, upd_alg::hf, 0, 0);
         stats s = solve(xnf, opts);
         CHECK( s.sat == true ); //SAT
         CHECK( check_sol(clss.cls, s.sol) );
     }
     
-    SECTION( "dh:mp-fls:trivial-upd:par -- 4 jobs" ) {
-        options opts(num_vars, num_cls, dec_heu::mp, fls_alg::trivial, upd_alg::par, 4, 0, 0);
+    SECTION( "dh:mp-fls:trivial-upd:par" ) {
+        options opts(num_vars, num_cls, dec_heu::mp, fls_alg::trivial, upd_alg::par, 0, 0);
         stats s = solve(xnf, opts);
         CHECK( s.sat == true ); //SAT
         CHECK( check_sol(clss.cls, s.sol) );
     }
     
     SECTION( "dh:mp-fls:trivial-upd:hf -- terminate within timeout" ) {
-        options opts(num_vars, num_cls, dec_heu::mp, fls_alg::trivial, upd_alg::hf, 1, 0, 0);
+        options opts(num_vars, num_cls, dec_heu::mp, fls_alg::trivial, upd_alg::hf, 0, 0);
         std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
         stats s = solve(xnf, opts);
         std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
         float time_no_time_out = static_cast<float>(std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count())/1000.0f;
 
-        options opts2(num_vars, num_cls, dec_heu::mp, fls_alg::trivial, upd_alg::hf, 1, 0, time_no_time_out+3);
+        options opts2(num_vars, num_cls, dec_heu::mp, fls_alg::trivial, upd_alg::hf, 0, time_no_time_out+3);
         begin = std::chrono::steady_clock::now();
         stats s2 = solve(xnf, opts2);
         end = std::chrono::steady_clock::now();
@@ -137,7 +137,7 @@ TEST_CASE("solving with different options -- timeout", "[impl-graph][graph][pars
     auto num_vars = clss.num_vars;
     auto num_cls = clss.num_cls;
 
-    options opts(num_vars, num_cls, dec_heu::mp, fls_alg::trivial, upd_alg::hf, 1, 0, 1);
+    options opts(num_vars, num_cls, dec_heu::mp, fls_alg::trivial, upd_alg::hf, 0, 1);
     stats s = solve(xnf, opts);
 
     CHECK( s.finished == false );

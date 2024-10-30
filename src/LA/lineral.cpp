@@ -32,12 +32,14 @@
 #include "omp.h"
 
 //implementation inspired by the one of 3BA by Jan Horacek
+//#define DIFF diff_[omp_get_thread_num()]
+#define DIFF diff_
 
-#define DIFF diff_[omp_get_thread_num()]
 
 // this suppress creating the new objects again and again
 // (each thread has their own diff-vec)
-vec< vec<var_t> > diff_( omp_get_max_threads() );
+//vec< vec<var_t> > diff_( omp_get_max_threads() );
+vec<var_t> diff_(0);
 
 
 size_t lineral::hash() const {
@@ -173,7 +175,7 @@ std::string lineral::to_full_str(var_t num_vars) const{
 lineral lineral::operator+(const lineral &other) const {
     /* \warning we assume that both linerals have same num_vars (!) */
     DIFF.clear(); // DIFF is declared global and static, this saves creating new DIFFs for each calling
-    std::set_symmetric_difference(std::execution::par, idxs.begin(), idxs.end(), other.idxs.begin(), other.idxs.end(), std::back_inserter(DIFF));
+    std::set_symmetric_difference(idxs.begin(), idxs.end(), other.idxs.begin(), other.idxs.end(), std::back_inserter(DIFF));
     //NOTE back_insterter might lead to repeated reallocations!
     //idxs = DIFF;
 
@@ -185,7 +187,7 @@ lineral& lineral::operator +=(const lineral& other) {
     if(other.size()==0) { p1^=other.p1; return *this; }
 
     DIFF.clear(); // DIFF is declared global and static, this saves creating new DIFFs for each calling
-    std::set_symmetric_difference(std::execution::par, idxs.begin(), idxs.end(), other.idxs.begin(), other.idxs.end(), std::back_inserter(DIFF));
+    std::set_symmetric_difference(idxs.begin(), idxs.end(), other.idxs.begin(), other.idxs.end(), std::back_inserter(DIFF));
     std::swap(idxs, DIFF);
 
     p1 ^= other.p1;

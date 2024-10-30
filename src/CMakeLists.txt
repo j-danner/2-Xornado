@@ -31,8 +31,5 @@ add_library(
     robin_hood-3.11.5/robin_hood.h
 )
 
-#find openmp package
-find_package(OpenMP REQUIRED)
-
-target_link_libraries(graph PUBLIC ${EXTRA_LIBS} PRIVATE OpenMP::OpenMP_CXX m4ri)
+target_link_libraries(graph PUBLIC ${EXTRA_LIBS} PRIVATE m4ri)
 

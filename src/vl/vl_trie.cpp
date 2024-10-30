@@ -266,7 +266,7 @@ vec<var_t> diff(0);
 lineral vl_trie::sum(const var_t lhs, const var_t rhs) const {
   diff.clear();
   diff.reserve( get_num_nodes()/num_vs + num_vars/10 );
-  std::set_symmetric_difference(std::execution::par, begin(lhs), end(), begin(rhs), end(), std::back_inserter(diff));
+  std::set_symmetric_difference(begin(lhs), end(), begin(rhs), end(), std::back_inserter(diff));
   //NOTE back_insterter might lead to repeated reallocations!
   return lineral(std::move(diff), true); //call ctor that does NOT sort diff
 }

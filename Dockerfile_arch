@@ -1,0 +1,10 @@
+#dockerfile for solver
+FROM archlinux:base-devel
+COPY . /2xornado
+RUN pacman -Syu --noconfirm && pacman -Syu --noconfirm base-devel jemalloc gcc-libs benchmark catch2 cmake m4ri && cd 2xornado && cmake . && make 2xornado
+ENTRYPOINT [ "2xornado/2xornado" ]
+
+# build image with
+#   docker build -t 2xornado:1.0 .
+# solve instance at path/fname with
+#   docker run -v path/fname:path/fname 2xornado_docker path/fname [args]
