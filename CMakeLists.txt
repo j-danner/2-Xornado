@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.12)
 
 # set the project name
-project(2xornado VERSION 1.0.2)
+project(2xornado VERSION 1.0.3)
 
 # specify the C++ standard
 set(CMAKE_CXX_STANDARD 20)

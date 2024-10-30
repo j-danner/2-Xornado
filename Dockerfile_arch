@@ -1,7 +1,7 @@
 #dockerfile for solver
 FROM archlinux:base-devel
 COPY . /2xornado
-RUN pacman -Syu --noconfirm && pacman -Syu --noconfirm base-devel jemalloc gcc-libs benchmark catch2 cmake m4ri && cd 2xornado && cmake . && make 2xornado
+RUN pacman -Syu --noconfirm && pacman -Syu --noconfirm base-devel jemalloc benchmark catch2 cmake m4ri && cd 2xornado && cmake . && make
 ENTRYPOINT [ "2xornado/2xornado" ]
 
 # build image with

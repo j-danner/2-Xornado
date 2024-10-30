@@ -47,8 +47,8 @@ To solve systems in algebraic normal form (ANF), use our [`anf_to_2xnf`](https:/
 
 ### Build
 
-On Ubuntu/Debian ensure that you have installed the packages `build-essential`, `cmake`, `libm4ri-dev`, and `libtbb-dev` (optionally `libjemalloc-dev`, `libbenchmark-dev`, `catch2`).
+On Ubuntu/Debian ensure that the packages `build-essential`, `cmake`, and `libm4ri-dev` (optionally `libjemalloc-dev`, `libbenchmark-dev`, `catch2`/`libcatch2-dev`) are installed. On Arch-based systems the packages `base-devel`, `cmake`, and `m4ri` (optionally `jemalloc`, `benchmark`, `catch2`) are required.
 Then run `cmake .` and `make 2xornado`.
 
-Alternatively, use the docker image `jdanner/2xornado` (download via `docker pull jdanner/2xornado:latest`) or build it yourself using the provided `Dockerfile` by `docker build -t jdanner/2xornado:latest .`. Then access 2-Xornado through [`docker_2xornado`](docker_2xornado).
+Alternatively, use the docker image `jdanner/2xornado` (download via `docker pull jdanner/2xornado:latest`) or build it yourself using the provided [`Dockerfile`](Dockerfile) by `docker build -t jdanner/2xornado:latest .`. Then access 2-Xornado through [`docker_2xornado`](docker_2xornado).
 
