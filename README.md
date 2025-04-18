@@ -52,3 +52,7 @@ Then run `cmake .` and `make 2xornado`.
 
 Alternatively, use the docker image `jdanner/2xornado` (download via `docker pull jdanner/2xornado:latest`) or build it yourself using the provided [`Dockerfile`](Dockerfile) by `docker build -t jdanner/2xornado:latest .`. Then access 2-Xornado through [`docker_2xornado`](docker_2xornado).
 
+### Reference
+
+[[1]](https://doi.org/10.1007/s11786-024-00594-x) B. Andraschko, J. Danner, and M. Kreuzer. SAT Solving Using XOR-OR-AND Normal Forms. _Math. Comput. Sci._ __18__, 20 (2024).
+
